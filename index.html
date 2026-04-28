@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>6-А ПОРТАЛ | V1.1.2</title>
+    <title>6-А ПОРТАЛ | V1.4.2 ULTRA-CORE</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
@@ -15,83 +15,65 @@
             --text: #ffffff;
         }
 
-        /* --- ЕФЕКТ "ПЛИННОСТІ" (LIQUID FLOW) --- */
+        /* --- АНІМАЦІЙНИЙ ПАКЕТ --- */
         @keyframes bgMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0) scale(1); }
-            33% { transform: translateY(-10px) scale(1.01); }
-            66% { transform: translateY(5px) scale(0.99); }
-        }
-
-        @keyframes liquidReveal {
-            0% { opacity: 0; filter: blur(20px); transform: translateY(30px) scale(0.8); }
-            100% { opacity: 1; filter: blur(0); transform: translateY(0) scale(1); }
-        }
-
-        @keyframes glitch {
-            0%, 90% { transform: none; text-shadow: none; }
-            92% { transform: skewX(12deg); text-shadow: 2px 0 red; }
-            95% { transform: skewX(-12deg); text-shadow: -2px 0 blue; }
-            100% { transform: none; }
-        }
+        @keyframes float { 0% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-12px) rotate(0.5deg); } 100% { transform: translateY(0px) rotate(0deg); } }
+        @keyframes reveal { 0% { opacity: 0; filter: blur(15px); transform: translateY(20px); } 100% { opacity: 1; filter: blur(0); transform: translateY(0); } }
+        @keyframes glitch { 0% { text-shadow: 1px 0 0 red, -1px 0 0 blue; } 2% { transform: translate(2px, -1px); } 4% { transform: translate(-1px, 1px); } 6% { text-shadow: none; transform: translate(0,0); } 100% { text-shadow: none; } }
+        @keyframes neonPulse { 0%, 100% { border-color: var(--border); box-shadow: 0 0 5px var(--green-glow); } 50% { border-color: var(--green); box-shadow: 0 0 20px var(--green-glow); } }
 
         body {
             margin: 0; padding: 0; background: var(--bg);
-            background-image: linear-gradient(-45deg, #050505, #0a110a, #050505, #081008);
+            background-image: linear-gradient(-45deg, #050505, #0d1a0d, #050505, #081208);
             background-size: 400% 400%; animation: bgMove 15s ease infinite;
-            color: var(--text); font-family: 'Inter', sans-serif;
+            color: var(--text); font-family: 'Inter', -apple-system, sans-serif;
             display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden;
         }
 
-        #app-root { width: 100%; max-width: 500px; padding: 25px; box-sizing: border-box; z-index: 10; }
+        #app-root { width: 100%; max-width: 480px; padding: 20px; box-sizing: border-box; }
 
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; animation: liquidReveal 1s cubic-bezier(0.2, 0.8, 0.2, 1); }
-        .header h1 { color: var(--green); margin: 0; font-size: 28px; font-weight: 950; text-shadow: 0 0 15px var(--green-glow); animation: glitch 10s infinite; }
-
-        /* ПОВЕРНУЛИ ПРОФІЛЬ */
-        .profile-btn {
-            width: 52px; height: 52px; border: 2.5px solid var(--green); border-radius: 18px;
-            display: flex; align-items: center; justify-content: center; background: rgba(62, 227, 92, 0.05);
-            box-shadow: 0 0 15px var(--green-glow); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .profile-btn:active { transform: scale(0.8) rotate(-10deg); }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; animation: reveal 0.8s ease-out; }
+        .header h1 { color: var(--green); margin: 0; font-size: 24px; font-weight: 900; animation: glitch 4s infinite; }
 
         .card {
-            background: var(--card); border: 1px solid var(--border); backdrop-filter: blur(30px);
-            border-radius: 40px; padding: 35px 25px; text-align: center; margin-bottom: 20px;
-            animation: liquidReveal 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) backwards, float 8s infinite ease-in-out;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            background: var(--card); border: 1px solid var(--border); backdrop-filter: blur(25px);
+            border-radius: 35px; padding: 30px 20px; text-align: center; margin-bottom: 20px;
+            animation: reveal 1s ease-out, float 5s infinite ease-in-out;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
 
-        .label-top { color: var(--green); font-size: 11px; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 15px; opacity: 0.8; }
-        #lessonName { font-size: 44px; font-weight: 950; margin: 10px 0; text-transform: uppercase; line-height: 0.9; text-shadow: 0 0 20px var(--green-glow); }
-        #nextLessonHint { font-size: 13px; color: var(--green); font-weight: 700; margin-top: 15px; opacity: 0.6; letter-spacing: 1px; }
-
-        .progress-container { width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 20px; margin-top: 25px; overflow: hidden; display: none; }
-        #lessonProgress { width: 0%; height: 100%; background: var(--green); box-shadow: 0 0 15px var(--green); transition: width 1s linear; }
+        .ai-assistant {
+            background: rgba(62, 227, 92, 0.08); border: 2px solid var(--border);
+            border-radius: 25px; padding: 18px; margin-bottom: 20px;
+            animation: reveal 1.2s ease-out, neonPulse 4s infinite;
+        }
 
         .main-btn {
-            background: var(--green); color: #000; border: none; padding: 22px; border-radius: 25px;
-            font-size: 16px; font-weight: 950; width: 100%; cursor: pointer; text-transform: uppercase;
-            margin-bottom: 15px; transition: 0.3s; box-shadow: 0 8px 25px var(--green-glow);
-            animation: liquidReveal 1s 0.3s backwards;
+            background: var(--green); color: #000; border: none; padding: 20px; border-radius: 22px;
+            font-size: 16px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase;
+            margin-bottom: 12px; transition: 0.3s; box-shadow: 0 8px 20px var(--green-glow);
+            animation: reveal 1.4s ease-out backwards;
         }
-        .main-btn:active { transform: scale(0.96); box-shadow: 0 2px 10px var(--green-glow); }
-        .secondary-btn { background: none; border: 2px solid var(--green); color: var(--green); box-shadow: none; }
+        .main-btn:active { transform: scale(0.95); }
+        .secondary-btn { background: none; border: 2px solid var(--green); color: var(--green); box-shadow: none; animation: reveal 1.6s ease-out backwards; }
 
-        #intelSection { display: none; width: 100%; animation: liquidReveal 0.5s; margin-bottom: 20px; }
-        #intelArea { width: 100%; background: rgba(0,0,0,0.7); border: 2px solid var(--green); border-radius: 20px; color: var(--green); padding: 20px; font-family: monospace; outline: none; box-sizing: border-box; }
+        .timer-bar {
+            background: rgba(255,255,255,0.05); border: 1px dashed var(--green);
+            color: #fff; padding: 18px; display: flex; border-radius: 22px;
+            justify-content: space-between; align-items: center; margin-bottom: 12px;
+        }
 
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); backdrop-filter: blur(40px); display: none; z-index: 1000; align-items: flex-end; }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(30px); display: none; z-index: 1000; align-items: flex-end; }
         .modal.active { display: flex; }
         .modal-box { 
-            background: #080808; width: 100%; padding: 60px 30px; border-radius: 50px 50px 0 0; 
-            border-top: 3px solid var(--green); text-align: center; animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); 
+            background: #0a0a0a; width: 100%; padding: 40px 20px; border-radius: 40px 40px 0 0; 
+            border-top: 3px solid var(--green); text-align: center;
+            animation: slideUp 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
-        .u-avatar { width: 120px; height: 120px; border-radius: 40px; border: 3px solid var(--green); margin-bottom: 20px; box-shadow: 0 0 40px var(--green-glow); }
+        #fullSchedule { display: grid; gap: 10px; margin-top: 15px; }
+        textarea { width: 100%; background: #000; border: 1px solid var(--green); border-radius: 15px; color: var(--green); padding: 15px; box-sizing: border-box; }
     </style>
 </head>
 <body>
@@ -100,160 +82,148 @@
         <div class="header">
             <div>
                 <h1>6-А ПОРТАЛ</h1>
-                <div style="font-size: 10px; color: var(--green); font-weight: 800; opacity: 0.5; letter-spacing: 3px;">V1.1.2 FINAL</div>
+                <div style="font-size: 10px; color: var(--green); opacity: 0.7;">ULTRA-CORE V1.4.2</div>
             </div>
-            <div class="profile-btn" onclick="openModal()">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <div style="width: 45px; height: 45px; border: 2px solid var(--green); border-radius: 12px; display: flex; align-items: center; justify-content: center;" onclick="openModal('profileModal')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             </div>
         </div>
 
         <div class="card">
-            <div class="label-top">Поточний Урок</div>
-            <div id="lessonName">АНАЛІЗ...</div>
-            
-            <div id="pBarContainer" class="progress-container">
-                <div id="lessonProgress"></div>
+            <div style="font-size: 11px; font-weight: 900; color: var(--green); letter-spacing: 3px;">SYSTEM ACTIVE</div>
+            <div id="lessonName" style="font-size: 32px; font-weight: 950; margin: 10px 0;">АНАЛІЗ...</div>
+            <div id="nextLessonHint" style="font-size: 12px; opacity: 0.4; font-weight: 700;">СИНХРОНІЗАЦІЯ ДАНИХ</div>
+        </div>
+
+        <div class="ai-assistant">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                <div style="padding: 4px 8px; background: var(--green); border-radius: 6px; color: #000; font-weight: 950; font-size: 12px;">T4</div>
+                <div style="font-size: 11px; font-weight: 900; letter-spacing: 1px; color: var(--green);">ПОМІЧНИК TARASI4IK</div>
             </div>
-            
-            <div id="nextLessonHint">ОЧІКУВАННЯ ДАНИХ...</div>
+            <div id="aiPhrase" style="font-size: 13px; font-weight: 600; line-height: 1.4; color: #eee;">Завантажую базу порад...</div>
         </div>
 
-        <button class="main-btn secondary-btn" onclick="toggleSchedule()">АРХІВ ДАНИХ (РОЗКЛАД)</button>
-        <div id="fullSchedule" style="display:none; width: 100%; margin-bottom: 20px;"></div>
+        <button class="main-btn" onclick="openModal('excuseModal')">ГЕНЕРАТОР ВІДМАЗОК</button>
 
-        <button class="main-btn secondary-btn" onclick="toggleIntel()">ОСОБИСТІ ДАНІ (НОТАТКИ)</button>
-        <div id="intelSection">
-            <textarea id="intelArea" rows="4" placeholder="Введіть секретні нотатки..." oninput="saveIntel()"></textarea>
+        <div class="timer-bar" onclick="openModal('timerModal')">
+            <span style="font-weight: 800; font-size: 14px;">ЧАС ДО КІНЦЯ</span>
+            <span id="miniTimer" style="color: var(--green); font-family: monospace; font-weight: 900; font-size: 18px;">00:00</span>
         </div>
 
-        <div class="card" style="padding: 20px; animation-delay: 0.4s;">
-            <div style="font-size: 50px; font-weight: 900; letter-spacing: -2px;" id="countVal">18</div>
-            <div style="font-size: 10px; opacity: 0.5; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;">Система активна</div>
+        <button class="main-btn secondary-btn" onclick="toggleSection('fullSchedule')">РОЗКЛАД</button>
+        <div id="fullSchedule" style="display:none;"></div>
+
+        <button class="main-btn secondary-btn" onclick="toggleSection('intelSection')">НОТАТКИ</button>
+        <div id="intelSection" style="display:none;">
+            <textarea id="intelArea" rows="4" placeholder="Твій секретний текст..." oninput="saveIntel()"></textarea>
         </div>
     </div>
 
-    <div id="profileModal" class="modal" onclick="closeModal()">
+    <div id="timerModal" class="modal" onclick="closeModal('timerModal')">
         <div class="modal-box" onclick="event.stopPropagation()">
-            <img id="avatarImg" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="u-avatar">
-            <h2 id="uName" style="margin:0; font-size: 36px; font-weight: 900;">Гість</h2>
-            <p id="uTag" style="color: var(--green); font-weight: 700; margin-bottom: 40px; font-size: 18px;">@6a_user</p>
-            <button class="main-btn" onclick="closeModal()">ПОВЕРНУТИСЯ</button>
+            <div style="font-size: 11px; font-weight: 900; color: var(--green); letter-spacing: 2px;">COUNTDOWN</div>
+            <div id="countdownTimer" style="font-family: monospace; font-size: 60px; font-weight: 900; color: var(--green); text-shadow: 0 0 20px var(--green-glow);">00:00:00</div>
+            <div id="endTimeLabel" style="color: #fff; font-size: 14px; font-weight: 800; opacity: 0.6; margin-bottom: 25px; border-top: 1px solid var(--border); padding-top: 10px; display: inline-block;">ЗАКІНЧЕННЯ: --:--</div>
+            <button class="main-btn" onclick="closeModal('timerModal')">ЗАКРИТИ</button>
+        </div>
+    </div>
+
+    <div id="excuseModal" class="modal" onclick="closeModal('excuseModal')">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <h2 style="color: var(--green); font-weight: 900;">ВІДМАЗКА</h2>
+            <button class="main-btn" onclick="generateExcuse()">ЗГЕНЕРУВАТИ</button>
+            <div id="excuseResultBlock" style="display:none; margin-top:20px; padding: 20px; border: 1px solid var(--border); border-radius: 15px;">
+                <div id="excuseText" style="font-weight: 700; font-size: 16px;"></div>
+            </div>
+            <button class="main-btn secondary-btn" onclick="closeModal('excuseModal')" style="margin-top:20px;">ЗАКРИТИ</button>
+        </div>
+    </div>
+
+    <div id="profileModal" class="modal" onclick="closeModal('profileModal')">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <h2 id="uName">Гість</h2>
+            <p style="color: var(--green); opacity: 0.6;">Admin Access Granted</p>
+            <button class="main-btn" onclick="closeModal('profileModal')">ЗАКРИТИ</button>
         </div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
-        const scheduleData = {
-            1: ["Математика", "Історія", "Укр.мова", "Укр.мова", "Заруб. літ-ра", "Музика", "Математика", "Природа"],
-            2: ["Математика", "Укр. літ-ра", "Громад. освіта", "Англ. мова", "Англ. мова", "Заруб. літ-ра", "Інформатика"],
-            3: ["Математика", "Інформатика", "Географія", "Укр.мова", "Укр.мова", "Історія", "Хореограф"],
-            4: ["Математика", "Укр. літ-ра", "Здоров'я, доброб", "Англ. мова", "Англ. мова", "Фізкультура"],
-            5: ["-", "Здоров'я, добробут", "Географія", "Фізкультура", "Природа", "Технології", "Англ. мова"]
-        };
-
-        const timeSlots = [
-            { s: "08:15", e: "08:55" }, { s: "09:00", e: "09:40" }, { s: "09:50", e: "10:30" },
-            { s: "10:40", e: "11:20" }, { s: "11:40", e: "12:20" }, { s: "12:30", e: "13:10" },
-            { s: "13:20", e: "14:00" }, { s: "14:10", e: "14:50" }
+        
+        const excuses = ["Зошит з'їла нейромережа.", "Файл заблокував вірус.", "Збій через Меркурій.", "Кіт ліг на зошит.", "Брат зробив літачок.", "Камера не працює.", "Зум вилетів сам.", "Глючить інтернет."];
+        
+        const aiPhrases = [
+            "Tarasi4ik бачить: ти вже 20 хвилин слухаєш вчителя... в навушниках грає фонк, так? 😉",
+            "Портал зафіксував 100% продуктивності... у Brawl Stars. Кубки самі себе не наб'ють! 🏆",
+            "Порада від Tarasi4ik: якщо викликали відповідати, імітуй робота і кажи 'По-мил-ка зв'яз-ку'. 🤖",
+            "Рівень інтелекту в класі впав на 40%, бо ти зараз гортаєш стрічку ТікТоку. Продовжуй! 📱",
+            "Tarasi4ik просканував щоденник: там порожньо, як у холодильнику вночі. Ідеально. 💎",
+            "Твій мозок зараз у режимі 'Енергозбереження'. Не турбуй його навчанням. 🔋",
+            "Tarasi4ik підрахував: якщо вийти з Zoom зараз, шанс отримати 'двійку' — 50%, а шанс поїсти — 100%. 🍕",
+            "Система виявила підозрілу активність: ти дивишся на вчителя довше 5 секунд. Обережно, це заразно! ⚠️",
+            "Tarasi4ik рекомендує: напиши в чат 'Мене не чути?', вимкни звук і йди грати в Roblox. 🎮"
         ];
 
-        function refreshApp() {
-            const now = new Date();
-            const day = now.getDay();
-            const cur = now.getHours() * 60 + now.getMinutes();
-            let active = null;
-            let next = null;
-            let sT = 0, eT = 0;
+        const scheduleData = { 1: ["МАТЕМАТИКА", "ІСТОРІЯ", "УКР.МОВА", "УКР.МОВА", "ЗАРУБ. ЛІТ", "МУЗИКА", "МАТЕМАТИКА", "ПРИРОДА"], 2: ["МАТЕМАТИКА", "УКР. ЛІТ", "ГРОМАД. ОСВ", "АНГЛ. МОВА", "АНГЛ. МОВА", "ЗАРУБ. ЛІТ", "ІНФОРМАТИКА"], 3: ["МАТЕМАТИКА", "ІНФОРМАТИКА", "ГЕОГРАФІЯ", "УКР.МОВА", "УКР.МОВА", "ІСТОРІЯ", "ХОРЕОГРАФ"], 4: ["МАТЕМАТИКА", "УКР. ЛІТ", "ЗДОРОВ'Я", "АНГЛ. МОВА", "АНГЛ. МОВА", "ФІЗКУЛЬТУРА"], 5: ["-", "ЗДОРОВ'Я", "ГЕОГРАФІЯ", "ФІЗКУЛЬТУРА", "ПРИРОДА", "ТЕХНОЛОГІЇ", "АНГЛ. МОВА"] };
+        const timeSlots = [{ s: "08:15", e: "08:55" }, { s: "09:00", e: "09:40" }, { s: "09:50", e: "10:30" }, { s: "10:40", e: "11:20" }, { s: "11:40", e: "12:20" }, { s: "12:30", e: "13:10" }, { s: "13:20", e: "14:00" }, { s: "14:10", e: "14:50" }];
 
+        function generateExcuse() { document.getElementById('excuseText').innerText = excuses[Math.floor(Math.random() * excuses.length)]; document.getElementById('excuseResultBlock').style.display = 'block'; tg.HapticFeedback.impactOccurred('medium'); }
+        function openModal(id) { document.getElementById(id).classList.add('active'); tg.HapticFeedback.impactOccurred('light'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        function refreshApp() {
+            const now = new Date(); const day = now.getDay(); const cur = now.getHours() * 60 + now.getMinutes();
+            let active = null; let next = null; let slotEnd = "--:--"; let endS = 0;
             if (scheduleData[day]) {
                 timeSlots.forEach((slot, i) => {
-                    const [sH, sM] = slot.s.split(':').map(Number);
-                    const [eH, eM] = slot.e.split(':').map(Number);
+                    const [sH, sM] = slot.s.split(':').map(Number); const [eH, eM] = slot.e.split(':').map(Number);
                     const s = sH * 60 + sM, e = eH * 60 + eM;
-                    
-                    if (cur >= s && cur < e) {
-                        active = scheduleData[day][i];
-                        sT = s; eT = e;
-                        // Шукаємо наступний урок
-                        for(let j = i + 1; j < scheduleData[day].length; j++) {
-                            if (scheduleData[day][j] && scheduleData[day][j] !== "-") {
-                                next = scheduleData[day][j];
-                                break;
-                            }
-                        }
+                    if (cur >= s && cur < e) { 
+                        active = scheduleData[day][i]; slotEnd = slot.e; 
+                        endS = (e * 60) - (now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds());
+                        for(let j=i+1; j<scheduleData[day].length; j++){ if(scheduleData[day][j] && scheduleData[day][j]!=="-"){ next=scheduleData[day][j]; break; } }
                     }
                 });
-                
-                // Якщо зараз перерва, знайдемо найближчий майбутній урок
-                if (!active) {
-                    for(let i = 0; i < timeSlots.length; i++) {
-                        const [sH, sM] = timeSlots[i].s.split(':').map(Number);
-                        if (cur < (sH * 60 + sM)) {
-                            if (scheduleData[day][i] && scheduleData[day][i] !== "-") {
-                                next = scheduleData[day][i];
-                                break;
-                            }
-                        }
-                    }
-                }
             }
-
-            const nD = document.getElementById('lessonName');
-            const hD = document.getElementById('nextLessonHint');
-            const pB = document.getElementById('lessonProgress');
-            const pC = document.getElementById('pBarContainer');
-
             if (active && active !== "-") {
-                nD.innerText = active;
-                pC.style.display = "block";
-                pB.style.width = ((cur - sT) / (eT - sT) * 100) + "%";
-                hD.innerText = next ? "ДАЛІ: " + next : "ЦЕ ОСТАННІЙ УРОК";
+                document.getElementById('lessonName').innerText = active;
+                document.getElementById('nextLessonHint').innerText = next ? "ДАЛІ: " + next : "ОСТАННІЙ УРОК";
+                let m = Math.floor(endS / 60); let s = endS % 60;
+                document.getElementById('countdownTimer').innerText = `00:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+                document.getElementById('miniTimer').innerText = `${m}:${s.toString().padStart(2,'0')}`;
+                document.getElementById('endTimeLabel').innerText = "ЗАКІНЧЕННЯ: " + slotEnd;
             } else {
-                nD.innerText = (day === 0 || day === 6) ? "ВИХІДНИЙ" : "ПЕРЕРВА";
-                pC.style.display = "none";
-                hD.innerText = next ? "НАСТУПНИЙ: " + next : "УРОКИ ЗАКІНЧЕНО";
+                document.getElementById('lessonName').innerText = (day === 0 || day === 6) ? "ВИХІДНИЙ" : "ПЕРЕРВА";
+                document.getElementById('miniTimer').innerText = "OFF";
+                document.getElementById('endTimeLabel').innerText = "УРОКИ НЕ ЙДУТЬ";
             }
-        }
-
-        function toggleSchedule() {
-            const s = document.getElementById('fullSchedule');
-            s.style.display = s.style.display === 'block' ? 'none' : 'block';
-            if (s.innerHTML === "") renderSched();
-            tg.HapticFeedback.impactOccurred('medium');
+            // Зміна фрази раз на 2 хвилини
+            if (now.getSeconds() === 0 && now.getMinutes() % 2 === 0) {
+                document.getElementById('aiPhrase').innerText = aiPhrases[Math.floor(Math.random() * aiPhrases.length)];
+                tg.HapticFeedback.notificationOccurred('success');
+            }
         }
 
         function renderSched() {
-            let h = '';
-            const days = ["", "ПОНЕДІЛОК", "ВІВТОРОК", "СЕРЕДА", "ЧЕТВЕР", "П'ЯТНИЦЯ"];
-            for(let d=1; d<=5; d++) {
-                h += `<div style="background:rgba(255,255,255,0.03); padding:20px; border-radius:25px; margin-bottom:15px; border:1px solid var(--border); animation: liquidReveal 0.5s;">
-                <div style="color:var(--green); font-weight:950; font-size:14px; letter-spacing:2px;">${days[d]}</div>`;
-                scheduleData[d].forEach((l, i) => { if(l !== "-") h += `<div style="font-size:13px; opacity:0.8; margin-top:5px;">${i}. ${l}</div>` });
-                h += `</div>`;
+            let h = ''; const days = ["НЕДІЛЯ", "ПОНЕДІЛОК", "ВІВТОРОК", "СЕРЕДА", "ЧЕТВЕР", "П'ЯТНИЦЯ", "СУБОТА"];
+            for(let d = 1; d <= 5; d++) {
+                h += `<div style="background:rgba(62,227,92,0.05); border:1px solid var(--border); border-radius:15px; padding:12px;">
+                    <div style="color:var(--green); font-size:10px; font-weight:900; margin-bottom:5px;">${days[d]}</div>
+                    <div style="display:flex; flex-wrap:wrap; gap:5px;">`;
+                scheduleData[d].forEach((l, i) => { if(l!=="-") h+=`<div style="background:rgba(255,255,255,0.05); padding:4px 8px; border-radius:8px; font-size:10px;">${i+1}. ${l}</div>`; });
+                h += `</div></div>`;
             }
             document.getElementById('fullSchedule').innerHTML = h;
         }
 
-        function toggleIntel() {
-            const s = document.getElementById('intelSection');
-            s.style.display = s.style.display === 'block' ? 'none' : 'block';
-            tg.HapticFeedback.impactOccurred('light');
-        }
-
+        function toggleSection(id) { const s = document.getElementById(id); s.style.display = s.style.display==='grid'?'none':'grid'; if(id==='fullSchedule') renderSched(); tg.HapticFeedback.selectionChanged(); }
         function saveIntel() { localStorage.setItem('6a_intel', document.getElementById('intelArea').value); }
-        function openModal() { document.getElementById('profileModal').classList.add('active'); tg.HapticFeedback.impactOccurred('medium'); }
-        function closeModal() { document.getElementById('profileModal').classList.remove('active'); }
 
         function init() {
-            tg.ready(); tg.expand();
-            document.getElementById('intelArea').value = localStorage.getItem('6a_intel') || "";
-            const user = tg.initDataUnsafe?.user;
-            if (user) {
-                document.getElementById('uName').innerText = user.first_name;
-                document.getElementById('uTag').innerText = user.username ? "@" + user.username : "ID: " + user.id;
-                if (user.photo_url) document.getElementById('avatarImg').src = user.photo_url;
-            }
-            refreshApp(); setInterval(refreshApp, 10000);
+            tg.ready(); tg.expand(); document.getElementById('intelArea').value = localStorage.getItem('6a_intel') || "";
+            const user = tg.initDataUnsafe?.user; if (user) document.getElementById('uName').innerText = user.first_name;
+            document.getElementById('aiPhrase').innerText = aiPhrases[Math.floor(Math.random() * aiPhrases.length)];
+            refreshApp(); setInterval(refreshApp, 1000);
         }
         init();
     </script>
