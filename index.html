@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>6-А ПОРТАЛ | V1.9.0</title>
+    <title>6-А ПОРТАЛ | V1.9.1</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
@@ -64,12 +64,7 @@
             animation: reveal 0.8s ease-out 0.6s backwards, genPulse 4s infinite ease-in-out 1.6s;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3); text-shadow: 0 1px 2px rgba(255,255,255,0.5);
         }
-
-        .profile-icon {
-            width: 45px; height: 45px; border: 2px solid var(--border); border-radius: 15px;
-            display: flex; align-items: center; justify-content: center; transition: 0.3s all;
-            background: rgba(255,255,255,0.03);
-        }
+        .gen-btn:active { animation: genClick 0.4s ease; }
 
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.94); backdrop-filter: blur(30px); display: none; z-index: 1000; align-items: flex-end; opacity: 0; transition: opacity 0.3s; }
         .modal.active { display: flex; opacity: 1; }
@@ -117,6 +112,7 @@
 
     <div id="timerModal" class="modal" onclick="closeModal('timerModal')"><div class="modal-box" onclick="event.stopPropagation()"><div style="font-size: 11px; font-weight: 900; color: var(--green); letter-spacing: 2px;">УРОК ЗАВЕРШУЄТЬСЯ</div><div id="countdownTimer" class="big-timer">00:00:00</div><button class="main-btn gen-btn" onclick="closeModal('timerModal')" style="justify-content: center; width: auto; margin: 0 auto; padding: 15px 30px;">ЗАКРИТИ</button></div></div>
     <div id="freedomModal" class="modal" onclick="closeModal('freedomModal')"><div class="modal-box" onclick="event.stopPropagation()"><div style="font-size: 11px; font-weight: 900; color: #fff; letter-spacing: 2px;">ДО ПОВНОЇ СВОБОДИ</div><div id="freedomTimer" class="big-timer" style="color: #fff;">00:00:00</div><button class="main-btn gen-btn" onclick="closeModal('freedomModal')" style="justify-content: center; width: auto; margin: 0 auto; padding: 15px 30px;">ТРИМАЮСЬ!</button></div></div>
+    
     <div id="excuseModal" class="modal" onclick="closeModal('excuseModal')"><div class="modal-box" onclick="event.stopPropagation()"><h2 style="color: var(--green); font-weight: 900;">ВІДМАЗКА</h2><button class="main-btn gen-btn" onclick="generateExcuse()" style="justify-content: center; margin-bottom: 25px;">НОВА КАРТА ⚡</button><div id="excuseResultBlock" style="display:none; padding: 25px; border: 2px dashed var(--green); border-radius: 20px; background: rgba(62,227,92,0.08);"><div id="excuseText" style="font-weight: 700; font-size: 17px; line-height: 1.5; color: #fff;"></div></div><button class="main-btn" onclick="closeModal('excuseModal')" style="justify-content: center; margin-top: 30px; border-color: rgba(255,255,255,0.1); color: #888;">ЗАКРИТИ</button></div></div>
     
     <div id="notesModal" class="modal" onclick="closeModal('notesModal')"><div class="modal-box" onclick="event.stopPropagation()"><h2 style="color: var(--green); font-weight: 900; margin: 0;">ШВИДКІ НОТАТКИ</h2><textarea id="noteArea" placeholder="Напиши щось важливе..."></textarea><button class="main-btn gen-btn" onclick="saveLocalNote()" style="justify-content: center; margin-top: 20px;">ЗБЕРЕГТИ</button><button class="main-btn" onclick="closeModal('notesModal')" style="justify-content: center; margin-top: 10px; border-color: rgba(255,255,255,0.1); color: #888;">ЗАКРИТИ</button></div></div>
@@ -125,7 +121,29 @@
 
     <script>
         const tg = window.Telegram.WebApp;
-        const initialExcuses = ["Вимкнули світло 🕯️", "Windows оновлюється 🔄", "Сусіди перфоратором 🛠️", "Кіт вирвав шнур 🐈", "ДЗ самознищився ☣️", "Мишка живе своїм життям 🖱️", "Роутер димить 💨", "Клавіатура в чаї ☕", "Магнітні бурі ☄️"];
+        
+        // ПОВНИЙ СПИСОК ВІДМАЗОК ПОВЕРНУТО!
+        const initialExcuses = [
+            "Вимкнули світло, сиджу з ліхтариком 🕯️",
+            "Windows оновлюється на 3 години 🔄",
+            "Сусіди перебили кабель перфоратором 🛠️",
+            "Мікрофон видає звуки прибульців 👽",
+            "Кіт вирвав шнур живлення прямо з розети 🐈",
+            "ДЗ самознищився через невідомий вірус ☣️",
+            "Мишка живе своїм життям і не слухається 🖱️",
+            "Роутер димить від перевантаження 💨",
+            "Брат видалив Zoom заради місця для гри 🎮",
+            "Клавіатура залита гарячим чаєм ☕",
+            "Кіт з'їв конспект, поки я ходив по воду 🐈‍⬛",
+            "Навушники розрядилися на найцікавішому місці 🔋",
+            "Магнітні бурі в моїй кімнаті заважають сигналу ☄️",
+            "Браузер вирішив, що сьогодні вихідний 😴",
+            "Компутер перегрівся і пішов у глибоку сплячку 💤",
+            "Камера показує лише чорну діру 🌑",
+            "Інтернет пішов у відпустку без попередження ✈️",
+            "Пролита вода створила коротке замикання 💧",
+            "Залагав мозок разом із комп'ютером 🧠❌"
+        ];
         let deck = [...initialExcuses];
 
         const scheduleData = { 
@@ -138,7 +156,14 @@
 
         const timeSlots = [{s:"08:15", e:"08:55"}, {s:"09:00", e:"09:40"}, {s:"09:50", e:"10:30"}, {s:"10:40", e:"11:20"}, {s:"11:40", e:"12:20"}, {s:"12:30", e:"13:10"}, {s:"13:20", e:"14:00"}, {s:"14:10", e:"14:50"}];
 
-        function generateExcuse() { if(!deck.length) deck=[...initialExcuses]; const idx=Math.floor(Math.random()*deck.length); document.getElementById('excuseText').innerText=deck.splice(idx,1)[0]; document.getElementById('excuseResultBlock').style.display='block'; tg.HapticFeedback.impactOccurred('rigid'); }
+        function generateExcuse() { 
+            if(!deck.length) deck=[...initialExcuses]; 
+            const idx=Math.floor(Math.random()*deck.length); 
+            document.getElementById('excuseText').innerText=deck.splice(idx,1)[0]; 
+            document.getElementById('excuseResultBlock').style.display='block'; 
+            tg.HapticFeedback.impactOccurred('rigid'); 
+        }
+
         function openModal(id) { document.getElementById(id).classList.add('active'); tg.HapticFeedback.impactOccurred('light'); if(id==='notesModal') document.getElementById('noteArea').value = localStorage.getItem('userNote') || ''; }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
         function saveLocalNote() { localStorage.setItem('userNote', document.getElementById('noteArea').value); tg.HapticFeedback.notificationOccurred('success'); closeModal('notesModal'); }
