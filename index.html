@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>6-А ПОРТАЛ | V3.0.0 ULTIMATE ANIMATION</title>
+    <title>6-А ПОРТАЛ | MEGA MOTION V3.8</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
@@ -13,176 +13,118 @@
             --card: rgba(255, 255, 255, 0.03);
             --border: rgba(62, 227, 92, 0.2);
             --text: #ffffff;
-            --glow: 0 0 15px rgba(62, 227, 92, 0.5);
         }
 
-        /* --- КУПА НОВИХ АНІМАЦІЙ --- */
-        
-        /* Вхід елементів з ефектом заносу */
+        /* --- БЛОК УЛЬТРА АНІМАЦІЙ --- */
         @keyframes entrance {
-            0% { opacity: 0; transform: translateY(50px) scale(0.9) rotateX(-30deg); }
-            60% { opacity: 1; transform: translateY(-10px) scale(1.02) rotateX(0deg); }
+            0% { opacity: 0; transform: translateY(100px) scale(0.7) rotateX(-50deg); }
             100% { opacity: 1; transform: translateY(0) scale(1) rotateX(0deg); }
         }
 
-        /* Вихід модалки вгору */
         @keyframes exitToTop {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(-100%) scale(0.8); opacity: 0; }
+            0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+            30% { transform: translateY(25px) scale(1.1); }
+            100% { transform: translateY(-120vh) scale(0.4) rotate(-15deg); opacity: 0; }
         }
 
-        /* Глобальне плавання меню */
-        @keyframes floatingMenu {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            25% { transform: translateY(-8px) rotate(0.5deg); }
-            75% { transform: translateY(8px) rotate(-0.5deg); }
+        @keyframes fluidFloating {
+            0%, 100% { transform: translateY(0) rotate(0.5deg); }
+            50% { transform: translateY(-12px) rotate(-0.5deg); }
         }
 
-        /* Дихання фону картки */
-        @keyframes cardBgPulse {
-            0%, 100% { background: rgba(255, 255, 255, 0.02); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-            50% { background: rgba(62, 227, 92, 0.05); box-shadow: 0 4px 30px rgba(62, 227, 92, 0.1); }
+        @keyframes glowScan {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
         }
 
-        /* Пульсація тексту */
-        @keyframes textGlowPulse {
-            0%, 100% { text-shadow: 0 0 5px rgba(255,255,255,0.2); }
-            50% { text-shadow: 0 0 15px rgba(255,255,255,0.6), 0 0 20px var(--green); }
+        @keyframes textShock {
+            0% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.05); filter: brightness(1.5); color: var(--blue); }
+            100% { transform: scale(1); filter: brightness(1); }
         }
 
-        /* Обертання іконки профілю при наведенні */
-        @keyframes profileSpin {
-            to { transform: rotate(360deg); }
+        @keyframes cardPulse {
+            0% { box-shadow: 0 5px 20px rgba(62, 227, 92, 0.1); }
+            50% { box-shadow: 0 10px 40px rgba(62, 227, 92, 0.3); }
+            100% { box-shadow: 0 5px 20px rgba(62, 227, 92, 0.1); }
+        }
+
+        @keyframes iconBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
 
         body {
             margin: 0; padding: 0; background: var(--bg);
-            background-image: 
-                radial-gradient(circle at 10% 10%, #0d1a0d 0%, transparent 40%),
-                radial-gradient(circle at 90% 90%, #05121a 0%, transparent 40%);
+            background-image: radial-gradient(circle at 0% 0%, #0d1a0d 0%, transparent 55%),
+                              radial-gradient(circle at 100% 100%, #05121a 0%, transparent 55%);
             color: var(--text); font-family: 'Inter', -apple-system, sans-serif;
             display: flex; flex-direction: column; align-items: center; min-height: 100vh;
             overflow-x: hidden; -webkit-tap-highlight-color: transparent;
+            scroll-behavior: smooth;
         }
 
-        #app-root { 
-            width: 100%; max-width: 480px; padding: 20px; box-sizing: border-box; 
-            perspective: 1000px; /* Для 3D ефектів */
-        }
+        #app-root { width: 100%; max-width: 480px; padding: 20px; box-sizing: border-box; perspective: 1500px; -webkit-overflow-scrolling: touch; }
 
-        /* Заголовок з послідовною появою */
-        .header { 
-            display: flex; justify-content: space-between; align-items: center; 
-            margin-bottom: 25px; animation: entrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        .header h1 { font-size: 22px; font-weight: 900; color: var(--green); margin: 0; animation: textGlowPulse 3s infinite; }
-        .brand { font-size: 10px; font-weight: 700; opacity: 0.6; letter-spacing: 1px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; animation: entrance 0.8s ease-out; }
+        .header h1 { font-size: 26px; font-weight: 950; color: var(--green); letter-spacing: -1px; margin: 0; }
 
-        /* Картка статусу: Плаває, дихає, переливається */
         .card {
-            background: var(--card); border: 1.5px solid var(--border); backdrop-filter: blur(15px);
-            border-radius: 24px; padding: 25px 20px; text-align: center; margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            animation: 
-                entrance 1s cubic-bezier(0.34, 1.56, 0.64, 1), 
-                cardBgPulse 6s infinite ease-in-out;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--card); border: 1.5px solid var(--border); backdrop-filter: blur(25px);
+            border-radius: 32px; padding: 35px 25px; text-align: center; margin-bottom: 25px;
+            animation: entrance 1s cubic-bezier(0.34, 1.56, 0.64, 1), cardPulse 4s infinite;
         }
-        .card:hover { transform: scale(1.02) translateY(-5px); border-color: rgba(62, 227, 92, 0.5); }
 
-        #lessonName { animation: textGlowPulse 4s infinite 1s; }
-
-        /* Шкала з ефектом біжучої хвилі */
-        .progress-container {
-            width: 100%; height: 10px; background: rgba(255,255,255,0.05);
-            border-radius: 10px; margin-top: 20px; position: relative; overflow: hidden; display: none;
-        }
-        .progress-bar {
-            height: 100%; width: 0%; border-radius: 10px;
-            transition: width 1s linear, background 0.4s;
-            position: relative;
-        }
-        .progress-bar::after {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            animation: wave 1.5s infinite;
-        }
-        @keyframes wave { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
-
-        /* СПИСОК КНОПОК: ПЛАВАЮЧЕ МЕНЮ */
-        .btn-list { 
-            display: flex; flex-direction: column; gap: 12px; width: 100%; 
-            animation: floatingMenu 8s infinite ease-in-out;
-        }
+        .btn-list { display: flex; flex-direction: column; gap: 16px; animation: fluidFloating 6s infinite ease-in-out; }
         
-        /* Кнопки з 3D ефектом натискання та світінням */
         .main-btn {
-            background: rgba(255,255,255,0.02); border: 1px solid var(--border); color: #ddd;
-            padding: 18px 20px; border-radius: 18px; font-size: 14px; font-weight: 700;
+            background: rgba(255,255,255,0.02); border: 1px solid var(--border); color: #fff;
+            padding: 22px; border-radius: 24px; font-size: 16px; font-weight: 800;
             cursor: pointer; position: relative; overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex; justify-content: space-between; align-items: center;
-            /* Послідовна поява */
-            opacity: 0; animation: entrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            opacity: 0; animation: entrance 0.7s forwards;
+            user-select: none;
         }
         
-        /* Додаємо затримку для кожної кнопки */
-        .btn-list .main-btn:nth-child(1) { animation-delay: 0.2s; }
-        .btn-list .main-btn:nth-child(2) { animation-delay: 0.3s; }
-        .btn-list .main-btn:nth-child(3) { animation-delay: 0.4s; }
-        .btn-list .main-btn:nth-child(4) { animation-delay: 0.5s; }
-        .btn-list .main-btn:nth-child(6) { animation-delay: 0.6s; } /* Бо 5-й це прихований розклад */
-
-        .main-btn:active { transform: scale(0.95) translateY(2px); box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); }
-        .main-btn:hover { border-color: var(--green); color: #fff; box-shadow: 0 0 15px rgba(62, 227, 92, 0.2); background: rgba(62, 227, 92, 0.03); }
-
-        .gen-btn { 
-            background: linear-gradient(135deg, var(--blue), var(--green));
-            border: none; color: #000; font-weight: 900;
-            box-shadow: 0 4px 15px rgba(62, 227, 92, 0.3);
-            text-shadow: 0 1px 1px rgba(255,255,255,0.3);
-        }
-        .gen-btn:hover { box-shadow: 0 6px 20px rgba(62, 227, 92, 0.5); transform: translateY(-2px); }
-
-        /* Іконка профілю: Анімується при наведенні */
-        .profile-icon {
-            padding: 10px; border-radius: 14px; border: 1px solid var(--border); 
-            background: rgba(255,255,255,0.03); cursor: pointer;
-            transition: all 0.3s;
-        }
-        .profile-icon:hover { border-color: var(--green); background: rgba(62,227,92,0.05); }
-        .profile-icon hover svg { animation: profileSpin 0.6s linear; }
-
-        /* МОДАЛКИ: КУПА АНІМАЦІЙ ПРИ ВХОДІ/ВИХОДІ */
-        .modal { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); 
-            display: none; z-index: 1000; align-items: flex-end; 
-            opacity: 0; transition: opacity 0.3s;
-        }
+        .main-btn:active { transform: scale(0.92) skewX(-2deg); background: rgba(62, 227, 92, 0.15); }
+        .main-btn svg { transition: transform 0.3s ease; }
+        .main-btn:active svg { animation: iconBounce 0.4s ease infinite; }
         
+        .btn-list button:nth-child(1) { animation-delay: 0.1s; }
+        .btn-list button:nth-child(2) { animation-delay: 0.2s; }
+        .btn-list button:nth-child(3) { animation-delay: 0.3s; }
+        .btn-list button:nth-child(4) { animation-delay: 0.4s; }
+        .btn-list button:nth-child(6) { animation-delay: 0.5s; }
+
+        .gen-btn {
+            background: linear-gradient(90deg, #00f2fe, #3EE35C, #00f2fe);
+            background-size: 200% auto; border: none; color: #000;
+            animation: glowScan 3s linear infinite, entrance 0.7s 0.1s forwards;
+            box-shadow: 0 10px 20px rgba(62, 227, 92, 0.3);
+        }
+
+        /* MODALS */
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.94); backdrop-filter: blur(30px); display: none; z-index: 9999; align-items: flex-end; opacity: 0; transition: opacity 0.4s; }
         .modal.active { display: flex; opacity: 1; }
         
-        /* Box модалки: Виїжджає знизу з "відскоком" */
         .modal-box { 
-            background: #0a0a0a; width: 100%; padding: 35px 25px 50px; 
-            border-radius: 30px 30px 0 0; border-top: 3px solid var(--green); 
-            box-shadow: 0 -10px 30px rgba(62, 227, 92, 0.1);
-            transform: translateY(100%);
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: #080808; width: 100%; padding: 45px 25px; border-radius: 45px 45px 0 0; 
+            border-top: 5px solid var(--green); transform: translateY(100%); 
+            transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            box-shadow: 0 -20px 60px rgba(62, 227, 92, 0.25);
         }
-        
         .modal.active .modal-box { transform: translateY(0); }
-        
-        /* Клас для анімації закриття (виліт вгору) */
-        .modal.out .modal-box {
-            animation: exitToTop 0.5s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards;
-        }
+        .modal.out .modal-box { animation: exitToTop 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
 
-        textarea { width: 100%; height: 130px; background: #1a1a1a; border: 1px solid var(--border); border-radius: 18px; color: #fff; padding: 18px; font-size: 16px; margin-top: 15px; outline: none; transition: 0.3s; }
-        textarea:focus { border-color: var(--green); box-shadow: 0 0 10px rgba(62, 227, 92, 0.2); }
-        
-        #countdownTimer, #freedomTimer { animation: textGlowPulse 2s infinite; }
+        /* PROGRESS */
+        .progress-container { width: 100%; height: 16px; background: rgba(255,255,255,0.06); border-radius: 20px; margin-top: 25px; overflow: hidden; display: none; border: 1px solid rgba(255,255,255,0.1); }
+        .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--green), var(--blue)); box-shadow: 0 0 25px var(--green); transition: width 1s linear; }
+
+        textarea { width: 100%; height: 160px; background: #121212; border: 2px solid var(--border); border-radius: 26px; color: #fff; padding: 22px; font-size: 17px; outline: none; transition: 0.3s; }
+        textarea:focus { border-color: var(--green); transform: scale(1.02); }
+
+        .profile-btn:active { transform: rotate(15deg) scale(1.1); transition: 0.2s; }
     </style>
 </head>
 <body>
@@ -191,162 +133,173 @@
         <div class="header">
             <div>
                 <h1>6-А ПОРТАЛ</h1>
-                <div class="brand">Tarasi4ik & Sensei.Co • V3.0</div>
+                <div style="font-size:11px; font-weight:900; opacity:0.7; letter-spacing:3px; color:var(--blue);">ULTIMATE MOBILE V3.8</div>
             </div>
-            <div class="profile-icon" onclick="openModal('profileModal')">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <div class="profile-btn" onclick="openModal('profileModal')" style="padding:14px; background:var(--card); border:1px solid var(--border); border-radius:20px; cursor:pointer;">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             </div>
         </div>
 
         <div class="card" id="statusCard">
-            <div style="font-size: 10px; font-weight: 900; color: var(--green); letter-spacing: 4px; opacity: 0.8;">NEON STATUS</div>
-            <div id="lessonName" style="font-size: 30px; font-weight: 950; margin: 12px 0; transition: color 0.5s;">АНАЛІЗУЮ...</div>
-            <div id="nextLessonHint" style="font-size: 13px; opacity: 0.6; font-weight: 600;">LOADING_DATA</div>
-            
-            <div class="progress-container" id="progCont">
-                <div class="progress-bar" id="progBar"></div>
-            </div>
+            <div style="font-size: 12px; font-weight: 900; color: var(--green); letter-spacing: 5px;">LIVE STATUS</div>
+            <div id="lessonName" style="font-size: 36px; font-weight: 950; margin: 18px 0; transition: 0.5s;">LOADING...</div>
+            <div id="nextLessonHint" style="font-size: 16px; opacity: 0.6; font-weight: 700;">FETCHING DATA...</div>
+            <div class="progress-container" id="progCont"><div class="progress-bar" id="progBar"></div></div>
         </div>
 
         <div class="btn-list">
-            <button class="main-btn gen-btn" onclick="openModal('excuseModal')">ГЕНЕРАТОР ВІДМАЗОК ✨</button>
-            <button class="main-btn" onclick="openModal('timerModal')">ДО КІНЦЯ УРОКУ <span id="miniTimer" style="color: var(--green); font-family: monospace; font-weight: 900;">00:00</span></button>
-            <button class="main-btn" onclick="openModal('freedomModal')">ЧАС ДО СВОБОДИ? 🔓</button>
-            <button class="main-btn" onclick="toggleSection('fullSchedule')">РОЗКЛАД 📅</button>
-            <div id="fullSchedule" style="display:none; flex-direction: column; gap: 10px; animation: entrance 0.5s ease-out;"></div>
-            <button class="main-btn" onclick="openModal('notesModal')">НОТАТКИ 📝</button>
+            <button class="main-btn gen-btn" onclick="openModal('excuseModal')">ГЕНЕРАТОР ВІДМАЗОК ✨ <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></button>
+            
+            <button class="main-btn" onclick="openModal('timerModal')">ДО КІНЦЯ УРОКУ <span id="miniTimer" style="color:var(--green); font-family: 'JetBrains Mono', monospace; font-size:18px;">00:00</span></button>
+            
+            <button class="main-btn" onclick="openModal('freedomModal')">ЧАС ДО СВОБОДИ? 🔓 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></button>
+            
+            <button class="main-btn" onclick="toggleSection('fullSchedule')">РОЗКЛАД 📅 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z"/></svg></button>
+            <div id="fullSchedule" style="display:none; flex-direction: column; gap: 12px; animation: entrance 0.6s cubic-bezier(0.23, 1, 0.32, 1);"></div>
+            
+            <button class="main-btn" onclick="openModal('notesModal')">НОТАТКИ 📝 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
         </div>
     </div>
 
-    <div id="excuseModal" class="modal" onclick="closeModalAnimation('excuseModal')"><div class="modal-box" onclick="event.stopPropagation()"><h2 style="color: var(--green); margin:0 0 25px 0;">ВІДМАЗКА ТИЖНЯ</h2><div id="excuseResultBlock" style="padding: 25px; border-radius: 20px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); margin-bottom: 25px; min-height: 50px; display: flex; align-items: center; justify-content: center; animation: entrance 0.4s ease-out;"><div id="excuseText" style="font-weight: 700; font-size: 17px; text-align:center;">Натисни кнопку...</div></div><div style="display:flex; flex-direction:column; gap:10px;"><button class="main-btn gen-btn" onclick="generateExcuse()" style="justify-content: center; font-size: 15px; padding: 18px;">ГЕНЕРУВАТИ НОВУ ⚡</button>
-        <button class="main-btn" onclick="closeModalAnimation('excuseModal')" style="justify-content: center; border-color: rgba(255,255,255,0.1); color: #888;">ВИЙТИ</button></div></div></div>
-    
-    <div id="timerModal" class="modal" onclick="closeModalAnimation('timerModal')"><div class="modal-box" onclick="event.stopPropagation()"><div style="font-size: 12px; font-weight: 900; color: var(--green); letter-spacing:1px;">ФІНІШ ЧЕРЕЗ</div><div id="countdownTimer" style="font-size: 55px; font-weight: 950; color: #fff; margin: 20px 0;">00:00:00</div><button class="main-btn gen-btn" onclick="closeModalAnimation('timerModal')" style="justify-content: center;">ЗРОЗУМІЛО</button></div></div>
-    
-    <div id="notesModal" class="modal" onclick="closeModalAnimation('notesModal')"><div class="modal-box" onclick="event.stopPropagation()"><h2 style="margin:0 0 10px 0;">НОТАТКИ</h2><textarea id="noteArea" placeholder="ДЗ, ідеї або секрети 6-А..."></textarea><button class="main-btn gen-btn" onclick="saveLocalNote()" style="justify-content: center; margin-top: 20px;">ЗБЕРЕГТИ</button></div></div>
+    <div id="excuseModal" class="modal" onclick="closeModalAnimation('excuseModal')">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <h2 style="color:var(--green); text-align:center; margin-bottom:30px; font-size:26px;">ВІДМАЗКА ✨</h2>
+            <div id="excuseResult" style="padding:40px 25px; border-radius:30px; background:rgba(255,255,255,0.03); border:2px solid var(--border); margin-bottom:30px; text-align:center; font-size:24px; font-weight:900;">
+                <span id="excuseText" style="display:inline-block;">Натисни кнопку...</span>
+            </div>
+            <button class="main-btn gen-btn" onclick="generateExcuse()" style="justify-content:center; margin-bottom:15px; padding:25px;">ГЕНЕРУВАТИ ⚡</button>
+            <button class="main-btn" onclick="closeModalAnimation('excuseModal')" style="justify-content:center; opacity:0.5; border:none;">ВИЙТИ</button>
+        </div>
+    </div>
 
-    <div id="freedomModal" class="modal" onclick="closeModalAnimation('freedomModal')"><div class="modal-box" onclick="event.stopPropagation()"><div style="font-size: 12px; font-weight: 900; opacity: 0.7; letter-spacing:1px;">ДО ПОВНОЇ СВОБОДИ</div><div id="freedomTimer" style="font-size: 55px; font-weight: 950; color: var(--blue); margin: 20px 0; text-shadow: 0 0 15px var(--blue);">00:00:00</div><button class="main-btn gen-btn" onclick="closeModalAnimation('freedomModal')" style="justify-content: center;">ТРИМАЮСЬ!</button></div></div>
+    <div id="timerModal" class="modal" onclick="closeModalAnimation('timerModal')">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <h2 style="text-align:center; opacity:0.7; font-size:20px;">ФІНІШ ЧЕРЕЗ</h2>
+            <div id="countdownTimer" style="font-size:75px; font-weight:950; text-align:center; margin:35px 0; letter-spacing:-3px; color:#fff;">00:00:00</div>
+            <button class="main-btn gen-btn" onclick="closeModalAnimation('timerModal')" style="justify-content:center; padding:25px;">ЗРОЗУМІЛО ✅</button>
+        </div>
+    </div>
 
-    <div id="profileModal" class="modal" onclick="closeModalAnimation('profileModal')"><div class="modal-box" onclick="event.stopPropagation()"><h1 id="uName" style="margin:0; font-size: 36px; animation: textGlowPulse 2s infinite;">Гість</h1><p style="color: var(--green); font-size: 14px; font-weight: 800; letter-spacing:1px; margin: 10px 0 30px 0;">УЧЕНЬ 6-А • АВТОРИЗОВАНО</p><button class="main-btn" onclick="closeModalAnimation('profileModal')" style="justify-content: center; margin-top: 20px; border-color: rgba(255,255,255,0.1); color: #888;">ЗАКРИТИ</button></div></div>
+    <div id="freedomModal" class="modal" onclick="closeModalAnimation('freedomModal')">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <h2 style="text-align:center; color:var(--blue); font-size:24px;">ДО СВОБОДИ</h2>
+            <div id="freedomTimer" style="font-size:75px; font-weight:950; text-align:center; margin:35px 0; color:var(--blue); text-shadow: 0 0 35px rgba(0, 242, 254, 0.5);">00:00:00</div>
+            <button class="main-btn gen-btn" onclick="closeModalAnimation('freedomModal')" style="justify-content:center; padding:25px;">ТРИМАЮСЬ! 💪</button>
+        </div>
+    </div>
+
+    <div id="notesModal" class="modal" onclick="closeModalAnimation('notesModal')">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <h2 style="margin-bottom:25px; font-size:26px;">НОТАТКИ 📝</h2>
+            <textarea id="noteArea" placeholder="Пиши сюди все, що треба запам'ятати..."></textarea>
+            <button class="main-btn gen-btn" onclick="saveLocalNote()" style="justify-content:center; margin-top:30px; padding:25px;">ЗБЕРЕГТИ ✅</button>
+        </div>
+    </div>
+
+    <div id="profileModal" class="modal" onclick="closeModalAnimation('profileModal')">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <h1 id="uName" style="font-size:55px; margin:0; animation: textShock 3s infinite;">Гість</h1>
+            <p style="color:var(--green); font-weight:900; letter-spacing:3px; margin-bottom:50px;">УЧЕНЬ 6-А • STATUS: ELITE</p>
+            <button class="main-btn" onclick="closeModalAnimation('profileModal')" style="justify-content:center; opacity:0.6; padding:25px;">ЗАКРИТИ</button>
+        </div>
+    </div>
 
     <script>
         const tg = window.Telegram.WebApp;
-        
-        // Тактильний відгук (посилений)
-        function vibe(type = 'light') {
-            if (type === 'heavy') tg.HapticFeedback.impactOccurred('heavy');
-            else if (type === 'success') tg.HapticFeedback.notificationOccurred('success');
-            else tg.HapticFeedback.impactOccurred('medium'); // Замінив light на medium для кращого відчуття
+        function vibe(t='medium') { tg.HapticFeedback.impactOccurred(t); }
+
+        function openModal(id) { 
+            vibe('heavy'); 
+            const m = document.getElementById(id);
+            m.classList.remove('out');
+            m.classList.add('active'); 
+            if(id==='notesModal') setTimeout(()=>document.getElementById('noteArea').focus(), 400);
         }
 
-        // --- ЛОГІКА МОДАЛОК З АНІМАЦІЄЮ ВИХОДУ ---
-        function openModal(id) { 
-            vibe(); 
-            const m = document.getElementById(id);
-            m.classList.remove('out'); // Прибираємо клас виходу, якщо він був
-            m.classList.add('active'); 
-            if(id==='notesModal') document.getElementById('noteArea').focus(); 
-        }
-        
         function closeModalAnimation(id) {
-            vibe();
+            vibe('medium');
             const m = document.getElementById(id);
-            m.classList.add('out'); // Додаємо клас анімації виходу
-            // Чекаємо завершення анімації (0.5с), тоді прибираємо active
+            m.classList.add('out');
             setTimeout(() => {
                 m.classList.remove('active');
                 m.classList.remove('out');
-            }, 500);
+            }, 700);
         }
 
-        const initialExcuses = ["Вимкнули світло 🕯️", "Windows оновлюється 🔄", "Сусіди перфоратором 🛠️", "Кіт вирвав шнур 🐈", "ДЗ самознищився ☣️", "Мишка живе своїм життям 🖱️", "Роутер димить 💨", "Клавіатура в чаї ☕", "Магнітні бурі ☄️", "Кіт з'їв конспект 🐈‍⬛", "Залагав мозок 🧠❌"];
-        let deck = [...initialExcuses];
+        const excuses = ["Вимкнули світло 🕯️", "Windows оновлюється 🔄", "Кіт вирвав шнур 🐈", "ДЗ самознищився ☣️", "Залагав мозок 🧠❌", "Магнітні бурі ☄️", "Сусіди перфоратором 🛠️", "Роутер димить 💨", "Вкрав НЛО 👽"];
+        function generateExcuse() {
+            vibe('heavy');
+            const txt = document.getElementById('excuseText');
+            txt.style.animation = 'textShock 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            txt.innerText = excuses[Math.floor(Math.random()*excuses.length)];
+            setTimeout(() => txt.style.animation = '', 500);
+        }
 
-        const scheduleData = { 
-            1: ["МАТЕМАТИКА", "ІСТОРІЯ", "УКР.МОВА", "УКР.МОВА", "ЗАРУБ. ЛІТ", "МУЗИКА", "МАТЕМАТИКА", "ПРИРОДА"], 
-            2: ["МАТЕМАТИКА", "УКР. ЛІТ", "ГРОМАД. ОСВ", "АНГЛ. МОВА", "АНГЛ. МОВА", "ЗАРУБ. ЛІТ", "ІНФОРМАТИКА"], 
-            3: ["МАТЕМАТИКА", "ІНФОРМАТИКА", "ГЕОГРАФІЯ", "УКР.МОВА", "УКР.МОВА", "ІСТОРІЯ", "ХОРЕОГРАФ"], 
-            4: ["МАТЕМАТИКА", "УКР. ЛІТ", "ЗДОРОВ'Я", "АНГЛ. МОВА", "АНГЛ. МОВА", "ФІЗКУЛЬТУРА"], 
+        const schedule = { 
+            1: ["МАТЕМАТИКА", "ІСТОРІЯ", "УКР.МОВА", "УКР.МОВА", "ЗАРУБ. ЛІТ", "МУЗИКА", "МАТЕМАТИКА", "ПРИРОДА"],
+            2: ["МАТЕМАТИКА", "УКР. ЛІТ", "ГРОМАД. ОСВ", "АНГЛ. МОВА", "АНГЛ. МОВА", "ЗАРУБ. ЛІТ", "ІНФОРМАТИКА"],
+            3: ["МАТЕМАТИКА", "ІНФОРМАТИКА", "ГЕОГРАФІЯ", "УКР.МОВА", "УКР.МОВА", "ІСТОРІЯ", "ХОРЕОГРАФ"],
+            4: ["МАТЕМАТИКА", "УКР. ЛІТ", "ЗДОРОВ'Я", "АНГЛ. МОВА", "АНГЛ. МОВА", "ФІЗКУЛЬТУРА"],
             5: ["-", "ЗДОРОВ'Я", "ГЕОГРАФІЯ", "ФІЗКУЛЬТУРА", "ПРИРОДА", "ТЕХНОЛОГІЇ", "АНГЛ. МОВА"]
         };
+        const slots = [{s:"08:15", e:"08:55"}, {s:"09:00", e:"09:40"}, {s:"09:50", e:"10:30"}, {s:"10:40", e:"11:20"}, {s:"11:40", e:"12:20"}, {s:"12:30", e:"13:10"}, {s:"13:20", e:"14:00"}, {s:"14:10", e:"14:50"}];
 
-        const timeSlots = [{s:"08:15", e:"08:55"}, {s:"09:00", e:"09:40"}, {s:"09:50", e:"10:30"}, {s:"10:40", e:"11:20"}, {s:"11:40", e:"12:20"}, {s:"12:30", e:"13:10"}, {s:"13:20", e:"14:00"}, {s:"14:10", e:"14:50"}];
-
-        function generateExcuse() { 
-            vibe('heavy');
-            const block = document.getElementById('excuseResultBlock');
-            block.style.animation = 'none'; // Скидання анімації
-            setTimeout(() => block.style.animation = 'entrance 0.4s ease-out', 10); // Запуск заново
-            
-            if(!deck.length) deck=[...initialExcuses]; 
-            const idx=Math.floor(Math.random()*deck.length); 
-            document.getElementById('excuseText').innerText=deck.splice(idx,1)[0]; 
-        }
-
-        function saveLocalNote() { vibe('success'); localStorage.setItem('userNote', document.getElementById('noteArea').value); closeModalAnimation('notesModal'); }
-
-        function refreshApp() {
+        function update() {
             const now = new Date();
             const day = now.getDay();
-            const curSec = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+            const cur = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
             
-            let active = null, next = null, type = "none", percent = 0;
+            let act = null, nxt = null, perc = 0, lastE = 0;
 
-            if (scheduleData[day]) {
-                const lessons = scheduleData[day];
-                timeSlots.forEach((slot, i) => {
-                    const sSec = slot.s.split(':').reduce((h, m) => h * 3600 + m * 60);
-                    const eSec = slot.e.split(':').reduce((h, m) => h * 3600 + m * 60);
+            if (schedule[day]) {
+                const daySched = schedule[day];
+                lastE = slots[daySched.length-1].e.split(':').reduce((h, m) => h * 3600 + m * 60);
 
-                    if (curSec >= sSec && curSec < eSec) {
-                        active = lessons[i];
-                        type = (active === "-") ? "break" : "lesson";
-                        percent = ((curSec - sSec) / (eSec - sSec)) * 100;
-                        let rem = eSec - curSec;
-                        document.getElementById('miniTimer').innerText = `${Math.floor(rem/60)}:${(rem%60).toString().padStart(2,'0')}`;
-                        document.getElementById('countdownTimer').innerText = `00:${Math.floor(rem/60).toString().padStart(2,'0')}:${(rem%60).toString().padStart(2,'0')}`;
+                slots.forEach((slot, i) => {
+                    const s = slot.s.split(':').reduce((h, m) => h * 3600 + m * 60);
+                    const e = slot.e.split(':').reduce((h, m) => h * 3600 + m * 60);
+                    if (cur >= s && cur < e) {
+                        act = daySched[i];
+                        perc = ((cur - s) / (e - s)) * 100;
+                        let rem = e - cur;
+                        const m = Math.floor(rem/60); const s_rem = rem%60;
+                        document.getElementById('miniTimer').innerText = `${m}:${s_rem.toString().padStart(2,'0')}`;
+                        document.getElementById('countdownTimer').innerText = `00:${m.toString().padStart(2,'0')}:${s_rem.toString().padStart(2,'0')}`;
                     }
-                    if (curSec < sSec && !next && lessons[i] !== "-") next = lessons[i];
+                    if (cur < s && !nxt && daySched[i] !== "-") nxt = daySched[i];
                 });
+
+                let freeRem = lastE - cur;
+                if (freeRem > 0) {
+                    let h = Math.floor(freeRem/3600); let m = Math.floor((freeRem%3600)/60); let s = freeRem%60;
+                    document.getElementById('freedomTimer').innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+                } else { document.getElementById('freedomTimer').innerText = "00:00:00"; }
             }
 
-            // Оновлення прогресу та кольорів
-            const bar = document.getElementById('progBar');
-            const cont = document.getElementById('progCont');
-            const card = document.getElementById('statusCard');
-
-            if (type !== "none") {
-                cont.style.display = 'block';
-                bar.style.width = percent + "%";
-                bar.style.background = (type === "lesson" && active !== "-") ? "var(--green)" : "var(--blue)";
-                bar.style.boxShadow = (type === "lesson" && active !== "-") ? "0 0 10px var(--green)" : "0 0 10px var(--blue)";
-                card.style.borderColor = (type === "lesson" && active !== "-") ? "rgba(62, 227, 92, 0.4)" : "rgba(0, 242, 254, 0.4)";
-                document.getElementById('lessonName').style.color = (type === "lesson" && active !== "-") ? "var(--green)" : "var(--blue)";
-            } else {
-                cont.style.display = 'none';
-                card.style.borderColor = "var(--border)";
-                document.getElementById('lessonName').style.color = "#fff";
-            }
-
-            document.getElementById('lessonName').innerText = (active && active !== "-") ? active : ((day === 0 || day === 6) ? "ВІДПОЧИНОК 😴" : "ПЕРЕРВА ☕");
-            document.getElementById('nextLessonHint').innerText = next ? "ДАЛІ: " + next : "НА СЬОГОДНІ ВСЕ ✅";
+            document.getElementById('lessonName').innerText = (act && act!=="-") ? act : ((day===0||day===6)?"ВІДПОЧИНОК 😴":"ПЕРЕРВА ☕");
+            document.getElementById('nextLessonHint').innerText = nxt ? "ДАЛІ: " + nxt : "УРОКИ СКІНЧИЛИСЬ ✅";
+            document.getElementById('progCont').style.display = (act && act!=="-") ? 'block' : 'none';
+            document.getElementById('progBar').style.width = perc + "%";
         }
 
         function toggleSection(id) {
             vibe();
             const s = document.getElementById(id);
             if(s.style.display==='none') {
-                let h='', days=["","ПН","ВТ","СР","ЧТ","ПТ"];
-                for(let d=1; d<=5; d++) {
-                    h += `<div style="background:rgba(255,255,255,0.03); padding:15px; border-radius:18px; font-size:13px; border: 1px solid var(--border); animation: entrance 0.4s ease-out backwards; animation-delay: ${d*0.1}s;"><b style="color:var(--green); font-size:14px;">${days[d]}</b>: ${scheduleData[d].filter(l=>l!=="-").join(' • ')}</div>`;
-                }
-                s.innerHTML=h; s.style.display='flex';
-            } else s.style.display='none';
+                let h='';
+                [1,2,3,4,5].forEach(d => {
+                    h += `<div style="background:rgba(255,255,255,0.04); padding:20px; border-radius:20px; border:1px solid var(--border); font-size:14px; animation: entrance 0.5s ease-out;"><b>ДЕНЬ ${d}</b>: ${schedule[d].filter(x=>x!=="-").join(' • ')}</div>`;
+                });
+                s.innerHTML = h; s.style.display = 'flex';
+            } else s.style.display = 'none';
         }
+
+        function saveLocalNote() { vibe('success'); localStorage.setItem('note', document.getElementById('noteArea').value); closeModalAnimation('notesModal'); }
 
         tg.ready(); tg.expand();
         const user = tg.initDataUnsafe?.user; if(user) document.getElementById('uName').innerText = user.first_name;
-        refreshApp(); setInterval(refreshApp, 1000);
+        document.getElementById('noteArea').value = localStorage.getItem('note') || "";
+        setInterval(update, 1000); update();
     </script>
 </body>
 </html>
