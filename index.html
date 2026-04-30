@@ -151,7 +151,6 @@
             resize: none; outline: none; 
         }
 
-        /* MODALS ANIMATION IMPROVED */
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0); backdrop-filter: blur(0px); display: none; z-index: 10000; align-items: flex-end; transition: all 0.4s ease; }
         .modal.active { display: flex; background: rgba(0,0,0,0.8); backdrop-filter: blur(15px); }
         .modal-box { 
@@ -231,9 +230,11 @@
         </div>
 
         <div class="btn-list staggered delay-3">
-            <button class="main-btn glow-btn" onclick="openExcuseGenerator()">ГЕНЕРАТОР ВІДМАЗОК ✨</button>
-            <button class="main-btn glow-btn" onclick="openFactGenerator()">ІНТЕЛЕКТ-МОДУЛЬ ✨</button>
             <button class="main-btn profile-btn" onclick="openProfile()">МІЙ КІБЕР-ПРОФІЛЬ 👤</button>
+            <button class="main-btn glow-btn" style="background: linear-gradient(90deg, #ff9a9e, #fad0c4); color: #000;" onclick="openTipGenerator()">ПОРАДА ДНЯ 💡</button>
+            <button class="main-btn glow-btn" onclick="openFactGenerator()">ІНТЕЛЕКТ-МОДУЛЬ ✨</button>
+            <button class="main-btn glow-btn" onclick="openExcuseGenerator()">ГЕНЕРАТОР ВІДМАЗОК ✨</button>
+            
             <button class="main-btn" onclick="openModal('notesModal')">МОЇ НОТАТКИ 📝</button>
             <button class="main-btn" onclick="openModal('timerModal')">ЧАС ДО КІНЦЯ <span id="miniTimer" style="color:var(--green)">00:00</span></button>
             <button class="main-btn" onclick="toggleSchedule()">РОЗКЛАД ДЗВІНКІВ 📅</button>
@@ -246,7 +247,7 @@
         </div>
     </div>
 
-    <!-- MODAL NOTES -->
+    <!-- MODALS -->
     <div id="notesModal" class="modal" onclick="closeAllModals()">
         <div class="modal-box" onclick="event.stopPropagation()">
             <h2 style="text-align:center; color:var(--blue); font-weight:900; margin-top:0;">ШВИДКІ НОТАТКИ</h2>
@@ -288,6 +289,15 @@
         </div>
     </div>
 
+    <!-- MODAL TIPS -->
+    <div id="tipModal" class="modal" onclick="closeAllModals()">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <div style="color:#ff9a9e; font-weight:900; font-size:10px; letter-spacing:3px; text-align:center; margin-bottom:15px;">ПОРАДА ДЛЯ НАВЧАННЯ</div>
+            <div id="tipText" style="font-size:18px; text-align:center; padding:10px; font-weight:600; line-height:1.5; min-height:100px;">...</div>
+            <button class="main-btn glow-btn" onclick="generateTip()" style="justify-content:center; width:100%; color:#000; margin-top:20px;">ІНША ПОРАДА</button>
+        </div>
+    </div>
+
     <div id="timerModal" class="modal" onclick="closeAllModals()">
         <div class="modal-box" onclick="event.stopPropagation()">
             <div id="countdownTimer" style="font-size:80px; text-align:center; color:var(--green); font-family:monospace; font-weight:900;">00:00</div>
@@ -303,9 +313,8 @@
 
     <script>
         const tg = window.Telegram.WebApp;
-        let stats = JSON.parse(localStorage.getItem('p_stats_v41_final')) || { ex: 0, fa: 0, mi: 0, lv: Date.now(), isOwner: false };
+        let stats = JSON.parse(localStorage.getItem('p_stats_v41_final')) || { ex: 0, fa: 0, mi: 0, tips: 0, lv: Date.now(), isOwner: false };
         
-        // Оновлені цифри XP
         const ranks = [
             {n:"Гість",r:0},
             {n:"Поважна особа",r:500},
@@ -324,27 +333,40 @@
         };
 
         const factsArr = [
-            "Блискавка в 5 разів гарячіша за поверхню Сонця, її температура може сягати 30 000°C. ⚡",
-            "Око страуса більше за його мозок. Це допомагає ему бачити хижаків на величезній відстані. 🦒",
-            "Мед — єдиний продукт у світі, який ніколи не псується. В єгипетських гробницях знаходили їстівний мед віком 3000 років. 🍯",
-            "Восьминоги мають три серця, дев’ять мізків і блакитну кров. Два серця качають кров до зябер, а одне — до всього тіла. 🐙",
-            "Венера — єдина планета Сонячної системи, яка обертається за годинниковою стрілкою. 🌌",
-            "Щосекунди Сонце спалює близько 600 мільйонів тонн водню, перетворюючи його на енергію. ☀️",
-            "У хмарах може міститися до кількох сотень тонн води, хоча вони виглядають легкими як пір'їнка. ☁️",
-            "Людський мозок генерує більше електричних імпульсів за один день, ніж усі телефони світу разом узяті. 🧠",
-            "Швидкість вітру на Нептуні може досягати 2100 км/год — це швидше за надзвуковий літак. 🌪️",
-            "Кит може затримати дихання на дві години, занурюючись на глибину до 3 кілометрів. 🐳",
-            "На Сатурні та Юпітері йдуть дощі з справжніх алмазів через величезний тиск в атмосфері. 💎",
-            "Коти мають 32 м'язи в кожному вусі, що дозволяє їм повертати їх на 180 градусів незалежно один від одного. 🐱"
+            "Блискавка в 5 разів гарячіша за поверхню Сонця. ⚡",
+            "Око страуса більше за його мозок. 🦒",
+            "Мед ніколи не псується. 🍯",
+            "Восьминоги мають три серця і дев’ять мізків. 🐙",
+            "Венера обертається за годинниковою стрілкою. 🌌",
+            "Щосекунди Сонце спалює 600 млн тонн водню. ☀️",
+            "Хмари можуть важити сотні тонн. ☁️",
+            "Мозок генерує більше імпульсів, ніж усі телефони світу. 🧠",
+            "Швидкість вітру на Нептуні — 2100 км/год. 🌪️",
+            "Кит може не дихати 2 години. 🐳",
+            "На Сатурні йдуть дощі з алмазів. 💎",
+            "Коти мають 32 м'язи в кожному вусі. 🐱"
+        ];
+
+        const tipsArr = [
+            "Пий воду під час навчання — мозок працює швидше. 💧",
+            "Метод Помодоро: 25 хв вчися, 5 хв відпочивай. ⏱️",
+            "Поясни тему другу — так ти запам'ятаєш її на 90%. 🗣️",
+            "Роби нотатки від руки, а не в телефоні. ✍️",
+            "Слухай фонову музику без слів (Lo-Fi або класика). 🎧",
+            "Найскладніше завдання роби першим. 🐸",
+            "Провітрюй кімнату перед уроками. 🌬️",
+            "Спи не менше 8 годин, щоб пам'ять працювала добре. 😴",
+            "Використовуй яскраві маркери для головних думок. 🖍️"
         ];
         
         let usedFacts = JSON.parse(localStorage.getItem('used_facts')) || [];
+        let usedTips = JSON.parse(localStorage.getItem('used_tips')) || [];
 
         function save() { localStorage.setItem('p_stats_v41_final', JSON.stringify(stats)); updateRank(); }
         function saveNotes() { localStorage.setItem('p_notes_v41', document.getElementById('userNotes').value); }
         function loadNotes() { document.getElementById('userNotes').value = localStorage.getItem('p_notes_v41') || ""; }
         
-        function getXP() { return stats.isOwner ? 1000000 : (stats.fa * 15 + stats.mi * 2); }
+        function getXP() { return stats.isOwner ? 1000000 : (stats.fa * 15 + stats.mi * 2 + (stats.tips || 0) * 10); }
 
         function updateRank() {
             const xp = getXP(); let cur = ranks[0], nxt = ranks[1];
@@ -380,6 +402,24 @@
             document.getElementById('progBar').style.width = p + "%";
         }
 
+        function openTipGenerator() {
+            generateTip();
+            openModal('tipModal');
+        }
+
+        function generateTip() {
+            if (usedTips.length >= tipsArr.length) usedTips = [];
+            let available = tipsArr.filter(t => !usedTips.includes(t));
+            let randomTip = available[Math.floor(Math.random() * available.length)];
+            usedTips.push(randomTip);
+            localStorage.setItem('used_tips', JSON.stringify(usedTips));
+            document.getElementById('tipText').innerText = randomTip;
+            if(!stats.tips) stats.tips = 0;
+            stats.tips++;
+            save();
+            tg.HapticFeedback.impactOccurred('light');
+        }
+
         function acceptUpdate() {
             const modal = document.getElementById('updateModal');
             const card = document.querySelector('.cyber-card');
@@ -403,13 +443,10 @@
 
         function syncAndGenerateFact() {
             if (usedFacts.length >= factsArr.length) usedFacts = [];
-            
             let availableFacts = factsArr.filter(f => !usedFacts.includes(f));
             let randomFact = availableFacts[Math.floor(Math.random() * availableFacts.length)];
-            
             usedFacts.push(randomFact);
             localStorage.setItem('used_facts', JSON.stringify(usedFacts));
-            
             document.getElementById('factText').innerText = randomFact;
             stats.fa++; 
             save();
