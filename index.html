@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>6-А ПОРТАЛ | v4.2 By:Tarasi4ik | FINAL</title>
+    <title>6-А ПОРТАЛ | v4.9.1 | FINAL</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
@@ -37,6 +37,7 @@
         }
         @keyframes titleFlow { 0% { background-position: 0% 50%; } 100% { background-position: 300% 50%; } }
 
+        /* Плаваюча анімація для карток */
         @keyframes float {
             0%, 100% { transform: translateY(0) rotate(0deg); }
             50% { transform: translateY(-10px) rotate(1deg); }
@@ -68,7 +69,15 @@
             position: relative; overflow: hidden;
         }
         
+        /* Ефект при дотику */
         .main-btn:active { transform: scale(0.92) rotate(-1deg); filter: brightness(1.2); }
+        
+        .main-btn::after {
+            content: ''; position: absolute; top: 50%; left: 50%; width: 0; height: 0;
+            background: rgba(255,255,255,0.2); border-radius: 50%; transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .main-btn:active::after { width: 300px; height: 300px; opacity: 0; }
 
         .disabled-btn {
             background: rgba(255,255,255,0.03) !important; 
@@ -103,41 +112,28 @@
         .modal-box { background: #080808; width: 100%; padding: 40px 25px; border-radius: 40px 40px 0 0; border-top: 3px solid var(--green); transform: translateY(100%); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.1); box-shadow: 0 -10px 40px var(--glow); box-sizing: border-box;}
         .modal.active .modal-box { transform: translateY(0); }
 
-        /* Стилі Вікна Оновлень */
-        .update-modal {
-            position: fixed; inset: 0; background: radial-gradient(circle at center, rgba(62, 227, 92, 0.1), #000);
-            backdrop-filter: blur(25px); display: none; z-index: 50000; align-items: center; justify-content: center;
-            opacity: 0; transition: 0.6s;
-        }
-        .update-modal.active { opacity: 1; }
-        .update-card {
-            background: rgba(10, 10, 10, 0.95); border: 2px solid var(--green); border-radius: 40px;
-            padding: 40px 30px; width: 85%; max-width: 400px; text-align: center;
-            box-shadow: 0 0 50px var(--glow); transform: scale(0.8); transition: 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .update-modal.active .update-card { transform: scale(1); }
-        .accept-btn {
-            margin-top: 25px; width: 100%; padding: 20px; border-radius: 22px;
-            background: var(--green); color: #000; border: none; font-weight: 900; font-size: 16px;
-            cursor: pointer; box-shadow: 0 10px 20px var(--glow); transition: 0.3s;
-        }
-        .exit-anim { transform: scale(1.5) !important; opacity: 0 !important; filter: blur(20px); }
-
+        .theme-card { background: rgba(255,255,255,0.03); border: 2px solid rgba(255,255,255,0.1); padding: 15px; border-radius: 20px; text-align: center; transition: 0.3s; }
+        .theme-card:active { transform: scale(0.9); }
+        
         .timer-display { font-size: 48px; font-weight: 900; margin: 20px 0; color: var(--green); text-shadow: 0 0 20px var(--glow); }
+
         .claim-btn { width: 100%; padding: 20px; border-radius: 20px; background: var(--green); border: none; font-weight: 900; color:#000; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px var(--glow); }
+        .claim-btn:active { transform: translateY(3px); box-shadow: none; }
         .claim-btn.locked { background: #222; color: #555; cursor: not-allowed; box-shadow: none; }
-        .schedule-day { margin-bottom: 15px; text-align: left; opacity: 0; }
+
+        .schedule-day { margin-bottom: 15px; text-align: left; animation: slideIn 0.4s ease-out forwards; opacity: 0; }
+        @keyframes slideIn { from { transform: translateX(-20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .schedule-day b { color: var(--green); display: block; margin-bottom: 5px; border-bottom: 1px solid var(--border); }
     </style>
 </head>
 <body>
 
     <canvas id="bg-canvas"></canvas>
 
-    <!-- Основний контент -->
     <div id="app-root" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
         <div class="header reveal">
             <h1>6-А ПОРТАЛ</h1>
-            <div style="font-size:10px; color:var(--green); text-align:center; letter-spacing:3px; font-weight:900;">V4.2 | By Tarasi4ik</div>
+            <div style="font-size:10px; color:var(--green); text-align:center; letter-spacing:3px; font-weight:900;">V4.9.1 | FINAL</div>
         </div>
 
         <div class="rank-bar reveal" onclick="openProfile()">
@@ -148,13 +144,13 @@
             <div style="text-align:right;">
                 <div id="topExpText" style="font-size:12px; font-weight:900;">0 XP</div>
                 <div style="width:80px; height:4px; background:rgba(255,255,255,0.1); border-radius:10px; margin-top:5px; overflow:hidden;">
-                    <div id="topExpFill" style="height:100%; background:var(--green); width:0%; transition:1.5s;"></div>
+                    <div id="topExpFill" style="height:100%; background:var(--green); width:0%; transition:1.5s cubic-bezier(0.1, 0, 0.1, 1);"></div>
                 </div>
             </div>
         </div>
 
         <div class="card reveal">
-            <div style="font-size: 10px; font-weight: 900; color: var(--green); letter-spacing: 2px;">LIVE_STATUS</div>
+            <div id="liveLabel" style="font-size: 10px; font-weight: 900; color: var(--green); letter-spacing: 2px;">LIVE_STATUS</div>
             <div id="lessonName" style="font-size: 24px; font-weight: 900; margin: 10px 0;">ОНОВЛЕННЯ...</div>
             <div id="nextLessonHint" style="font-size: 12px; opacity: 0.6; min-height: 15px;">...</div>
             <div style="width:100%; height:6px; background:rgba(255,255,255,0.05); border-radius:10px; margin-top:15px; overflow:hidden;">
@@ -168,39 +164,92 @@
             <button class="main-btn" onclick="openFact()">ІНТЕЛЕКТ-МОДУЛЬ ⚡️</button>
             <button class="main-btn" onclick="openAdvice()">ПОРАДА ДНЯ 💡</button>
             <button class="main-btn" onclick="toggleSchedule()">РОЗКЛАД ЗАНЯТЬ 📅</button>
-            <div id="fullSchedule" style="display:none; flex-direction: column; gap: 8px; padding: 20px; background: rgba(0,0,0,0.7); border-radius: 20px; border: 1px solid var(--border); font-size: 13px;"></div>
-        </div>
-    </div>
-
-    <!-- ВІКНО ОНОВЛЕНЬ -->
-    <div id="updateNotice" class="update-modal">
-        <div class="update-card" id="updateCard">
-            <div style="font-size: 50px;">🚀</div>
-            <h2 style="color:var(--green); margin:10px 0;">V4.2 ОНОВЛЕНО</h2>
-            <p style="font-size:13px; opacity:0.7;">Ми додали систему рангів, магазин тем та покращили стабільність.</p>
-            <div style="text-align:left; background:rgba(255,255,255,0.05); padding:15px; border-radius:20px; font-size:12px;">
-                • Новий дизайн карток<br>• Анімація при в ході<br>• Фікс таймера уроків
-            </div>
-            <button class="accept-btn" onclick="acceptUpdate()">ПРИЙНЯТИ ЗМІНИ</button>
+            <div id="fullSchedule" style="display:none; flex-direction: column; gap: 8px; padding: 20px; background: rgba(0,0,0,0.7); border-radius: 20px; border: 1px solid var(--border); font-size: 13px; line-height: 1.6;"></div>
+            <button class="main-btn disabled-btn">ГЕНЕРАТОР ВІДМАЗОК (LOCK) 🔒</button>
         </div>
     </div>
 
     <!-- Модалки -->
-    <div id="timerModal" class="modal" onclick="closeAllModals()"><div class="modal-box" onclick="event.stopPropagation()" style="text-align:center;"><div id="modalTimerClock" class="timer-display">00:00</div><div id="modalTimerSubject" style="font-weight:900;">...</div></div></div>
-    <div id="rewardsModal" class="modal" onclick="closeAllModals()"><div class="modal-box" onclick="event.stopPropagation()" style="text-align:center;"><div style="font-size:50px;">💎</div><button id="claimBtn" onclick="claimReward()" class="claim-btn">ЗАБРАТИ XP</button></div></div>
-    <div id="notesModal" class="modal" onclick="closeAllModals()"><div class="modal-box" onclick="event.stopPropagation()"><h2 style="color:var(--green);text-align:center;">НОТАТКИ</h2><textarea id="userNotes" oninput="saveNotes()" style="width:100%;height:200px;background:rgba(0,0,0,0.5);border:1px solid var(--border);color:#fff;border-radius:20px;padding:15px;outline:none;box-sizing:border-box;"></textarea></div></div>
+    <div id="timerModal" class="modal" onclick="closeAllModals()">
+        <div class="modal-box" onclick="event.stopPropagation()" style="text-align: center;">
+            <div style="font-size: 12px; font-weight: 900; letter-spacing: 2px; opacity: 0.5;">TIME_REMAINING</div>
+            <div id="modalTimerClock" class="timer-display">00:00</div>
+            <div id="modalTimerSubject" style="font-weight: 900; margin-bottom: 20px;">УРОК НЕ ВИЗНАЧЕНО</div>
+            <div style="width:100%; height:12px; background:rgba(255,255,255,0.05); border-radius:20px; overflow:hidden; border: 1px solid var(--border);">
+                <div id="modalTimerBar" style="height:100%; background:var(--green); width:0%; transition: 1s linear;"></div>
+            </div>
+        </div>
+    </div>
 
-    <!-- Навігація -->
+    <div id="rewardsModal" class="modal" onclick="closeAllModals()">
+        <div class="modal-box" onclick="event.stopPropagation()" style="text-align: center;">
+            <div style="font-size: 40px; margin-bottom: 10px; animation: bounceIn 0.8s infinite alternate;">🔥</div>
+            <div style="font-size: 10px; font-weight: 900; letter-spacing: 3px; color: var(--green); margin-bottom: 5px;">ЩОДЕННІ НАГОРОДИ</div>
+            <div style="font-size: 50px; margin-bottom: 20px;">💎</div>
+            <button id="claimBtn" onclick="claimReward()" class="claim-btn">ЗАБРАТИ +100 XP</button>
+        </div>
+    </div>
+
     <nav class="samsung-nav reveal">
-        <div class="nav-item active" id="nav-home" onclick="navTo('home')">🏠<span>Дім</span></div>
-        <div class="nav-item" id="nav-rewards" onclick="openRewards()">🎁<span>Бонус</span></div>
-        <div class="nav-item" id="nav-profile" onclick="openProfile()">👤<span>Профіль</span></div>
+        <div class="nav-item active" id="nav-home" onclick="navTo('home')">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            <span>Дім</span>
+        </div>
+        <div class="nav-item" id="nav-rewards" onclick="openRewards()">
+            <div id="rewardBadge" style="position:absolute; top:8px; right:25%; width:8px; height:8px; background:red; border-radius:50%; display:none; animation: pulse 1s infinite;"></div>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l-5.5 9h11L12 2zm0 3.84L13.93 9h-3.87L12 5.84z"/></svg>
+            <span>Бонус</span>
+        </div>
+        <div class="nav-item" id="nav-shop" onclick="navTo('shop')">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1z"/></svg>
+            <span>Крамниця</span>
+        </div>
+        <div class="nav-item" id="nav-profile" onclick="openProfile()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            <span>Профіль</span>
+        </div>
     </nav>
+
+    <div id="shopModal" class="modal" onclick="closeAllModals()">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <h2 style="color:var(--green); text-align: center;">МАРКЕТ ТЕМ</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="theme-card" onclick="buyTheme('green', 0)">
+                    <div style="width:25px; height:25px; background:#3EE35C; border-radius:50%; margin:0 auto 10px;"></div>
+                    <b style="font-size:10px;">EMERALD</b>
+                </div>
+                <div class="theme-card" onclick="buyTheme('purple', 500)">
+                    <div style="width:25px; height:25px; background:#bf00ff; border-radius:50%; margin:0 auto 10px;"></div>
+                    <b style="font-size:10px;">PURPLE</b>
+                </div>
+                <div class="theme-card" onclick="buyTheme('yellow', 1000)">
+                    <div style="width:25px; height:25px; background:#ffff00; border-radius:50%; margin:0 auto 10px;"></div>
+                    <b style="font-size:10px;">ELECTRIC</b>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="notesModal" class="modal" onclick="closeAllModals()">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <h2 style="color:var(--green); text-align:center;">НОТАТКИ</h2>
+            <textarea id="userNotes" oninput="saveNotes()" style="width:100%; height:200px; background:rgba(0,0,0,0.5); border:1px solid var(--border); color:#fff; border-radius:20px; padding:15px; outline:none; box-sizing:border-box;" placeholder="Тут твої секрети..."></textarea>
+        </div>
+    </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         let stats = JSON.parse(localStorage.getItem('portal_v49_stats')) || { xp: 0, lastClaim: 0 };
         let currentThemeColor = '#3EE35C';
+
+        // Intersection Observer для плавної появи при скролі
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
         const timeGrid = [
             { start: "08:15", end: "08:55" }, { start: "09:00", end: "09:40" },
@@ -217,23 +266,48 @@
             5: ["-", "Здоров'я, добробут", "Географія", "Фізкультура", "Природа", "Технології", "Англ. мова"]
         };
 
+        const dayNames = ["НЕДІЛЯ", "ПОНЕДІЛОК", "ВІВТОРОК", "СЕРЕДА", "ЧЕТВЕР", "П'ЯТНИЦЯ", "СУБОТА"];
+
         function updateLiveStatus() {
             const now = new Date();
-            const day = now.getDay();
+            const day = now.getDay(); 
             const currentTime = now.getHours() * 60 + now.getMinutes();
             const sec = now.getSeconds();
 
             const lessonLabel = document.getElementById('lessonName');
             const hintLabel = document.getElementById('nextLessonHint');
             const progBar = document.getElementById('progBar');
+            
+            const mClock = document.getElementById('modalTimerClock');
+            const mSubject = document.getElementById('modalTimerSubject');
+            const mBar = document.getElementById('modalTimerBar');
 
             if (day === 0 || day === 6 || !schedule[day]) {
-                lessonLabel.innerText = "ВИХІДНИЙ 🎉"; return;
+                const txt = "ВИХІДНИЙ 🎉";
+                lessonLabel.innerText = txt; mSubject.innerText = txt;
+                mClock.innerText = "--:--";
+                return;
             }
 
             const today = schedule[day];
+            let lastIdx = -1;
+            for(let i=today.length-1; i>=0; i--) { if(today[i] && today[i] !== "-") { lastIdx = i; break; } }
+            
+            const [lastH, lastM] = timeGrid[lastIdx].end.split(':').map(Number);
+            const dayEnd = lastH * 60 + lastM;
+
+            if (currentTime >= dayEnd) {
+                lessonLabel.innerText = "УРОКИ СКІНЧИЛИСЬ ✨";
+                mSubject.innerText = "ВІЛЬНИЙ ЧАС";
+                mClock.innerText = "FREE";
+                progBar.style.width = "100%";
+                return;
+            }
+
             let active = null;
-            for (let i = 0; i < today.length; i++) {
+            let next = null;
+
+            for (let i = 0; i <= lastIdx; i++) {
                 const [sH, sM] = timeGrid[i].start.split(':').map(Number);
                 const [eH, eM] = timeGrid[i].end.split(':').map(Number);
                 const start = sH * 60 + sM;
@@ -242,72 +316,177 @@
                 if (currentTime >= start && currentTime < end) {
                     active = { name: today[i], start, end }; break;
                 }
+                if (currentTime < start) {
+                    next = { name: today[i], start }; break;
+                }
             }
 
             if (active) {
-                lessonLabel.innerText = active.name;
-                const p = (((currentTime - active.start) * 60 + sec) / ((active.end - active.start) * 60)) * 100;
+                const totalSec = (active.end - active.start) * 60;
+                const elapsedSec = (currentTime - active.start) * 60 + sec;
+                const remainSec = totalSec - elapsedSec;
+                
+                const min = Math.floor(remainSec / 60);
+                const s = remainSec % 60;
+                
+                lessonLabel.innerText = active.name === "-" ? "ВІЛЬНИЙ ЧАС" : active.name;
+                mSubject.innerText = lessonLabel.innerText;
+                mClock.innerText = `${min}:${s < 10 ? '0' + s : s}`;
+                
+                const p = (elapsedSec / totalSec * 100);
                 progBar.style.width = p + "%";
-                hintLabel.innerText = "До кінця: " + (active.end - currentTime) + " хв";
-            } else {
+                mBar.style.width = p + "%";
+                hintLabel.innerText = `Залишилось: ${min} хв`;
+            } else if (next) {
                 lessonLabel.innerText = "ПЕРЕРВА ☕️";
+                mSubject.innerText = "ДО УРОКУ (" + next.name + ")";
+                const waitMin = next.start - currentTime - 1;
+                const waitSec = 60 - sec;
+                mClock.innerText = `${waitMin}:${waitSec < 10 ? '0' + waitSec : waitSec}`;
                 progBar.style.width = "0%";
+                mBar.style.width = "0%";
+                hintLabel.innerText = `Наступний: ${next.name}`;
             }
         }
 
-        function checkUpdateNotice() {
-            let visits = parseInt(localStorage.getItem('portal_visit_count')) || 0;
-            if (visits < 2) {
-                const modal = document.getElementById('updateNotice');
-                modal.style.display = 'flex';
-                setTimeout(() => modal.classList.add('active'), 100);
-                localStorage.setItem('portal_visit_count', visits + 1);
+        function updateRewardsBtn() {
+            const btn = document.getElementById('claimBtn');
+            const isReady = Date.now() - stats.lastClaim > 86400000;
+            if (isReady) {
+                btn.innerText = "ЗАБРАТИ +100 XP";
+                btn.classList.remove('locked');
+                document.getElementById('rewardBadge').style.display = 'block';
+            } else {
+                btn.innerText = "ЩЕ НЕ ЧАС";
+                btn.classList.add('locked');
+                document.getElementById('rewardBadge').style.display = 'none';
             }
         }
 
-        function acceptUpdate() {
-            const modal = document.getElementById('updateNotice');
-            const card = document.getElementById('updateCard');
-            card.classList.add('exit-anim');
-            modal.style.opacity = '0';
-            setTimeout(() => { modal.style.display = 'none'; showToast("СИСТЕМУ ГОТОВО ⚡"); }, 600);
+        function claimReward() {
+            if (Date.now() - stats.lastClaim < 86400000) return;
+            stats.xp += 100; stats.lastClaim = Date.now(); save();
+            showToast("💎 +100 XP ОТРИМАНО!");
+            updateRewardsBtn();
         }
 
-        function openModal(id) { document.getElementById(id).style.display='flex'; setTimeout(()=>document.getElementById(id).classList.add('active'),10); }
-        function closeAllModals() { document.querySelectorAll('.modal').forEach(m=>{m.classList.remove('active'); setTimeout(()=>m.style.display='none',400);}); }
-        function navTo(id) { document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); if(document.getElementById('nav-'+id)) document.getElementById('nav-'+id).classList.add('active'); if(id==='home') closeAllModals(); }
+        function openRewards() { openModal('rewardsModal'); navTo('rewards'); updateRewardsBtn(); }
+
+        const allAdvices = [
+            "Пий воду 💧", "Роби розминку 👀", "Читай книги 📚", "Менше Тік-Току 📵", 
+            "Спи 8 годин 😴", "Усміхнись собі 😊", "Запиши плани на завтра 📝", 
+            "Провітри кімнату 🌬️", "Подякуй комусь сьогодні ❤️", "Слухай музику 🎧",
+            "Зроби перерву від екрана 📵", "З'їж фрукт 🍎", "Потягнися вгору 🙆‍♂️",
+            "Повтори розклад 📅", "Зроби добру справу ✨", "Мрій сміливо 🚀",
+            "Будь впевненим у собі 💪", "Навчайся новому 🎓", "Спробуй медитацію 🧘",
+            "Обійми близьких 🤗", "Знайди час для хобі 🎨", "Прибери на столі 🧹"
+        ];
+        let usedAdvices = JSON.parse(localStorage.getItem('portal_used_advices')) || [];
+
+        function openAdvice() {
+            let avail = allAdvices.filter(a => !usedAdvices.includes(a));
+            if (avail.length === 0) { usedAdvices = []; avail = allAdvices; }
+            const pick = avail[Math.floor(Math.random() * avail.length)];
+            usedAdvices.push(pick);
+            localStorage.setItem('portal_used_advices', JSON.stringify(usedAdvices));
+            showToast(pick);
+        }
+
+        function buyTheme(type, price) {
+            if(stats.xp < price) { showToast("МАЛО XP!", "red"); return; }
+            if(type === 'purple') currentThemeColor = '#bf00ff';
+            else if(type === 'yellow') currentThemeColor = '#ffff00';
+            else currentThemeColor = '#3EE35C';
+            document.documentElement.style.setProperty('--green', currentThemeColor);
+            document.documentElement.style.setProperty('--glow', currentThemeColor + '55');
+            document.documentElement.style.setProperty('--border', currentThemeColor + '66');
+            showToast("ТЕМА ОНОВЛЕНА"); updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('topRankDisplay').innerText = stats.xp > 1000 ? "МАЙСТЕР" : "НОВАЧОК";
+            document.getElementById('topExpText').innerText = stats.xp + " XP";
+            document.getElementById('topExpFill').style.width = Math.min((stats.xp/5000)*100, 100) + "%";
+            updateRewardsBtn();
+        }
+
+        function save() { localStorage.setItem('portal_v49_stats', JSON.stringify(stats)); updateUI(); }
+        
+        function openFact() { 
+            stats.xp += 10; 
+            save(); 
+            showToast("+10 XP ЗА РОЗУМ 🧠"); 
+        }
+
+        function showToast(t, b) {
+            const el = document.createElement('div'); el.className='toast';
+            el.style.background = b || currentThemeColor; el.innerText = t;
+            document.body.appendChild(el); setTimeout(()=> {
+                el.style.opacity = '0';
+                el.style.top = '-50px';
+                setTimeout(() => el.remove(), 500);
+            }, 2000);
+        }
+
+        function navTo(id) {
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            const target = document.getElementById('nav-'+id);
+            if(target) target.classList.add('active');
+            if(id === 'shop') openModal('shopModal');
+            if(id === 'profile') openProfile();
+            if(id === 'home') closeAllModals();
+        }
+
+        function openModal(id) { 
+            const m=document.getElementById(id); 
+            m.style.display='flex'; 
+            setTimeout(()=>m.classList.add('active'),10); 
+        }
+
+        function closeAllModals() { 
+            document.querySelectorAll('.modal').forEach(m=>m.classList.remove('active')); 
+            setTimeout(()=>document.querySelectorAll('.modal').forEach(m=>m.style.display='none'),400); 
+            navTo('home'); 
+        }
+
         function openProfile() { openModal('notesModal'); navTo('profile'); }
-        function openRewards() { openModal('rewardsModal'); navTo('rewards'); }
         function saveNotes() { localStorage.setItem('portal_notes', document.getElementById('userNotes').value); }
-        function showToast(t) { const el = document.createElement('div'); el.className='toast'; el.innerText = t; document.body.appendChild(el); setTimeout(()=>el.remove(), 2500); }
-        function updateUI() { document.getElementById('topRankDisplay').innerText = stats.xp > 1000 ? "МАЙСТЕР" : "НОВАЧОК"; document.getElementById('topExpText').innerText = stats.xp + " XP"; document.getElementById('topExpFill').style.width = Math.min((stats.xp/5000)*100, 100) + "%"; }
-        function openFact() { stats.xp += 10; localStorage.setItem('portal_v49_stats', JSON.stringify(stats)); updateUI(); showToast("+10 XP ЗА РОЗУМ 🧠"); }
-        function openAdvice() { showToast("Будь кращим сьогодні! ✨"); }
 
         function toggleSchedule() {
             const s = document.getElementById('fullSchedule');
             if(s.style.display === 'none') {
-                s.innerHTML = "<b>РОЗКЛАД ЗАВАНТАЖЕНО</b>"; s.style.display = 'flex';
+                let h = "";
+                for(let d=1; d<=5; d++){
+                    h += `<div class="schedule-day" style="animation-delay: ${d*0.1}s"><b>${dayNames[d]}</b>`;
+                    schedule[d].forEach((l, i)=> h += `<div>${i}. ${l} <span style="opacity:0.3;font-size:9px;">(${timeGrid[i].start})</span></div>`);
+                    h += `</div>`;
+                }
+                s.innerHTML = h; s.style.display = 'flex';
             } else s.style.display = 'none';
         }
 
-        // Background
+        // Покращений фон
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let pts = [];
         function res() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         class Pt {
-            constructor() { this.x = Math.random()*window.innerWidth; this.y = Math.random()*window.innerHeight; this.s = Math.random()*2; this.sp = Math.random()*0.5; }
-            dr() { this.y += this.sp; if(this.y > canvas.height) this.y = -5; ctx.fillStyle = "#3EE35C"; ctx.globalAlpha = 0.3; ctx.beginPath(); ctx.arc(this.x, this.y, this.s, 0, 7); ctx.fill(); }
+            constructor() { this.reset(); this.y = Math.random()*canvas.height; }
+            reset() { this.x = Math.random()*canvas.width; this.y = -20; this.s = Math.random()*2 + 1; this.sp = Math.random()*1+0.5; this.o = Math.random()*0.5; }
+            up() { this.y += this.sp; if(this.y > canvas.height) this.reset(); }
+            dr() { ctx.fillStyle = currentThemeColor; ctx.globalAlpha = this.o; ctx.beginPath(); ctx.arc(this.x, this.y, this.s, 0, 7); ctx.fill(); }
         }
-        function anim() { ctx.clearRect(0,0,canvas.width,canvas.height); pts.forEach(p=>p.dr()); requestAnimationFrame(anim); }
-        window.onresize = res; res(); for(let i=0;i<40;i++) pts.push(new Pt()); anim();
+        function init() { for(let i=0; i<40; i++) pts.push(new Pt()); }
+        function anim() { ctx.clearRect(0,0,canvas.width,canvas.height); pts.forEach(p=>{p.up();p.dr();}); requestAnimationFrame(anim); }
+        window.onresize = res; res(); init(); anim();
 
         window.onload = () => {
             document.getElementById('userNotes').value = localStorage.getItem('portal_notes') || "";
             updateUI(); setInterval(updateLiveStatus, 1000); tg.expand();
-            checkUpdateNotice();
-            setTimeout(() => document.querySelectorAll('.reveal').forEach(el => el.classList.add('active')), 100);
+            // Початковий вхід
+            setTimeout(() => {
+                document.querySelectorAll('.reveal').forEach(el => el.classList.add('active'));
+            }, 100);
         };
     </script>
 </body>
