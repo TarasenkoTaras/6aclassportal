@@ -3,479 +3,312 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>6-А ПОРТАЛ | v4.1 FINAL | By: TARASI4IK</title>
+    <title>6-А ПОРТАЛ | v4.2 By:Tarasi4ik | FINAL</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --green: #3EE35C;
-            --blue: #00f2fe;
             --bg: #050505;
             --card: rgba(255, 255, 255, 0.03);
-            --border: rgba(62, 227, 92, 0.2);
+            --border: rgba(62, 227, 92, 0.4);
             --text: #ffffff;
-            --gold: #ffd700;
-            --purple: #bf00ff;
+            --glow: rgba(62, 227, 92, 0.3);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-
-        /* --- СТИЛІ ВІКНА ОНОВЛЕННЯ (v4.1) --- */
-        #updateModal {
-            position: fixed; inset: 0; background: #000; z-index: 20000;
-            display: none; align-items: center; justify-content: center;
-            font-family: 'Inter', sans-serif; overflow: hidden;
-            transition: opacity 0.5s ease, visibility 0.5s;
-        }
-        .matrix-bg {
-            position: absolute; inset: 0; 
-            background: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.9)), 
-                        url('https://64.media.tumblr.com/tumblr_m46r6fQZf11r7z6mdo1_500.gif');
-            background-size: cover; opacity: 0.15;
-        }
-        .cyber-card {
-            width: 90%; max-width: 380px; padding: 45px 30px; 
-            background: rgba(10, 15, 10, 0.98);
-            border: 1px solid var(--green); border-radius: 40px;
-            text-align: center; position: relative;
-            box-shadow: 0 0 50px rgba(62, 227, 92, 0.15);
-            animation: cyberEntrance 1s cubic-bezier(0.2, 0.8, 0.2, 1);
-            backdrop-filter: blur(10px);
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        @keyframes cyberEntrance {
-            0% { transform: scale(0.8) translateY(30px); opacity: 0; }
-            100% { transform: scale(1) translateY(0); opacity: 1; }
-        }
-        .glitch-text {
-            font-size: 70px; font-weight: 950; color: #fff;
-            margin-bottom: 25px; position: relative;
-            text-shadow: 0 0 20px rgba(62, 227, 92, 0.5);
-            letter-spacing: -3px;
-        }
-        .update-item {
-            display: flex; align-items: center; gap: 15px; margin-bottom: 25px;
-            opacity: 0; transform: translateX(-15px);
-            animation: itemIn 0.6s ease-out forwards;
-        }
-        .update-item:nth-child(1) { animation-delay: 0.4s; }
-        .update-item:nth-child(2) { animation-delay: 0.6s; }
-        .update-item:nth-child(3) { animation-delay: 0.8s; }
-        @keyframes itemIn { to { opacity: 1; transform: translateX(0); } }
-        
-        .accept-btn {
-            width: 100%; background: var(--green); color: #000;
-            padding: 20px; border-radius: 22px; border: none;
-            font-size: 16px; font-weight: 900; cursor: pointer;
-            text-transform: uppercase; letter-spacing: 2px;
-            position: relative; overflow: hidden; transition: 0.3s;
-            box-shadow: 0 10px 25px rgba(62, 227, 92, 0.4); margin-top: 10px;
-        }
-        .accept-btn:active { transform: scale(0.95); }
-        .btn-shine {
-            position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            animation: lightSweep 3s infinite;
-        }
-        @keyframes lightSweep { 0% { left: -100%; } 20% { left: 100%; } 100% { left: 100%; } }
-
-        /* --- СТИЛІ ОСНОВНОГО ПОРТАЛУ --- */
-        @keyframes entrance {
-            0% { opacity: 0; transform: translateY(30px); filter: blur(10px); }
-            100% { opacity: 1; transform: translateY(0); filter: blur(0); }
-        }
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 0 10px rgba(62, 227, 92, 0.1); border-color: rgba(62, 227, 92, 0.2); }
-            50% { box-shadow: 0 0 25px rgba(62, 227, 92, 0.3); border-color: rgba(62, 227, 92, 0.5); }
-            100% { box-shadow: 0 0 10px rgba(62, 227, 92, 0.1); border-color: rgba(62, 227, 92, 0.2); }
-        }
-        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
-        @keyframes floatSmall { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-4px); } }
-        @keyframes glowScan { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
 
         body {
-            margin: 0; padding: 0; background: var(--bg);
-            background-image: radial-gradient(circle at 50% 50%, #0d1a0d 0%, transparent 100%);
-            color: var(--text); font-family: 'Inter', sans-serif;
-            display: flex; flex-direction: column; align-items: center; min-height: 100vh;
-            overflow-x: hidden; -webkit-tap-highlight-color: transparent;
-        }
-        #app-root { width: 100%; max-width: 480px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; min-height: 100vh; }
-        .staggered { animation: entrance 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
-        .delay-1 { animation-delay: 0.1s; }
-        .delay-2 { animation-delay: 0.2s; }
-        .delay-3 { animation-delay: 0.3s; }
-
-        .header { text-align: center; margin-bottom: 20px; animation: floatSmall 6s infinite ease-in-out; }
-        .header h1 { margin:0; font-size: 28px; background: linear-gradient(to right, var(--green), var(--blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; }
-        .header .ver { font-size:10px; letter-spacing: 3px; color: var(--blue); font-weight: 900; margin-top: 5px; opacity: 0.8; }
-
-        .rank-bar {
-            background: var(--card); border: 1px solid var(--border); border-radius: 20px;
-            padding: 15px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;
-            backdrop-filter: blur(15px); cursor: pointer; transition: 0.3s;
-            animation: floatSmall 5s infinite ease-in-out 0.5s;
-        }
-        .rank-bar:active { transform: scale(0.97); }
-
-        .card {
-            background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 35px;
-            padding: 30px; text-align: center; margin-bottom: 25px; position: relative; 
-            animation: pulseGlow 4s infinite ease-in-out, floatSmall 7s infinite ease-in-out;
+            margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif;
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden;
+            padding-bottom: 120px; transition: 0.5s;
         }
 
-        .btn-list { display: flex; flex-direction: column; gap: 14px; margin-bottom: 30px; }
-        .main-btn {
-            background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff;
-            padding: 18px 22px; border-radius: 22px; font-size: 15px; font-weight: 800;
-            cursor: pointer; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; justify-content: space-between; align-items: center; outline: none;
-            animation: float 5s infinite ease-in-out;
-        }
-        .main-btn:active { transform: scale(0.94); }
-        .btn-list .main-btn:nth-child(odd) { animation-duration: 4.5s; }
-        .btn-list .main-btn:nth-child(even) { animation-duration: 5.5s; }
+        #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
 
-        .glow-btn {
-            background: linear-gradient(90deg, #00f2fe, #3EE35C, #00f2fe);
-            background-size: 200% auto; border: none; color: #000;
-            animation: glowScan 3s linear infinite, float 5s infinite ease-in-out !important;
+        /* Вхідні анімації */
+        .reveal { opacity: 0; transform: translateY(30px); transition: var(--transition); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        .header h1 { 
+            margin:20px 0 0; font-size: 32px; 
+            background: linear-gradient(90deg, var(--green), #fff, var(--green));
+            background-size: 300% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+            font-weight: 900; text-align: center; animation: titleFlow 5s linear infinite;
         }
-        .profile-btn {
-            background: linear-gradient(45deg, #bf00ff, #00f2fe, #bf00ff);
-            background-size: 400% 400%; border: none; color: #fff;
-            box-shadow: 0 0 15px rgba(191, 0, 255, 0.3);
+        @keyframes titleFlow { 0% { background-position: 0% 50%; } 100% { background-position: 300% 50%; } }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(1deg); }
         }
 
-        .notes-area { width: 100%; }
-        #userNotes { 
-            width: 100%; height: 250px; background: rgba(255,255,255,0.03); 
-            border: 1px solid var(--border); border-radius: 20px; color: #fff; 
-            font-family: inherit; font-size: 16px; padding: 15px; box-sizing: border-box;
-            resize: none; outline: none; 
+        .rank-bar { 
+            background: var(--card); border: 2px solid var(--green); border-radius: 24px; 
+            padding: 15px 20px; margin: 20px; display: flex; align-items: center; 
+            justify-content: space-between; backdrop-filter: blur(15px);
+            box-shadow: 0 0 20px var(--glow); transition: var(--transition); width: 85%;
+            animation: float 6s ease-in-out infinite;
         }
 
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0); backdrop-filter: blur(0px); display: none; z-index: 10000; align-items: flex-end; transition: all 0.4s ease; }
-        .modal.active { display: flex; background: rgba(0,0,0,0.8); backdrop-filter: blur(15px); }
-        .modal-box { 
-            background: #0a0a0a; width: 100%; padding: 40px 25px; 
-            border-radius: 40px 40px 0 0; border-top: 4px solid var(--blue); transform: translateY(100%); transition: 0.5s cubic-bezier(0.32, 1, 0.23, 1);
-            max-height: 80vh; overflow-y: auto;
+        .card { 
+            background: rgba(0,0,0,0.6); border: 1px solid var(--border); 
+            border-radius: 30px; padding: 25px; text-align: center; margin-bottom: 20px;
+            box-shadow: inset 0 0 15px var(--glow); transition: var(--transition); width: 85%; box-sizing: border-box;
+            animation: float 8s ease-in-out infinite reverse;
         }
-        .modal.active .modal-box { transform: translateY(0); }
-        .progress-container { width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 10px; margin-top: 15px; overflow: hidden; display: none; }
-        .progress-bar { height: 100%; background: var(--green); width: 0%; transition: width 1s linear; }
-        .exp-bar-fill { height: 100%; background: linear-gradient(90deg, var(--blue), var(--purple)); width: 0%; transition: 1.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+        .btn-list { display: flex; flex-direction: column; gap: 12px; width: 90%; }
         
+        .main-btn { 
+            background: linear-gradient(90deg, var(--bg), var(--green), var(--bg)); 
+            background-size: 200% auto; border: 1px solid var(--green); 
+            color: #fff; padding: 18px; border-radius: 22px; font-size: 14px; 
+            font-weight: 800; cursor: pointer; transition: var(--transition); display: flex; 
+            justify-content: space-between; align-items: center;
+            position: relative; overflow: hidden;
+        }
+        
+        .main-btn:active { transform: scale(0.92) rotate(-1deg); filter: brightness(1.2); }
+
+        .disabled-btn {
+            background: rgba(255,255,255,0.03) !important; 
+            border: 1px solid rgba(255,255,255,0.1) !important;
+            color: rgba(255,255,255,0.2) !important; 
+            cursor: not-allowed; filter: grayscale(1);
+        }
+
+        .samsung-nav {
+            position: fixed; bottom: 20px; width: 92%; max-width: 450px; height: 75px;
+            background: rgba(10, 10, 10, 0.9); backdrop-filter: blur(20px);
+            border-radius: 28px; border: 1px solid var(--border);
+            display: flex; justify-content: space-around; align-items: center; z-index: 11000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 15px var(--glow);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: rgba(255,255,255,0.3); transition: 0.3s; flex: 1; }
+        .nav-item.active { color: var(--green); filter: drop-shadow(0 0 8px var(--green)); transform: translateY(-5px); }
+        .nav-item span { font-size: 10px; font-weight: 800; }
+
+        .toast {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            padding: 15px 25px; border-radius: 20px; font-weight: 900; z-index: 30000;
+            background: var(--green); color: #000; box-shadow: 0 0 30px var(--glow);
+            animation: bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); text-align: center; width: 80%;
+        }
+        @keyframes bounceIn { from { top: -100px; opacity: 0; } to { top: 20px; opacity: 1; } }
+
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); display: none; z-index: 10000; align-items: flex-end; opacity: 0; transition: 0.4s; }
+        .modal.active { opacity: 1; }
+        .modal-box { background: #080808; width: 100%; padding: 40px 25px; border-radius: 40px 40px 0 0; border-top: 3px solid var(--green); transform: translateY(100%); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.1); box-shadow: 0 -10px 40px var(--glow); box-sizing: border-box;}
+        .modal.active .modal-box { transform: translateY(0); }
+
+        /* Стилі Вікна Оновлень */
+        .update-modal {
+            position: fixed; inset: 0; background: radial-gradient(circle at center, rgba(62, 227, 92, 0.1), #000);
+            backdrop-filter: blur(25px); display: none; z-index: 50000; align-items: center; justify-content: center;
+            opacity: 0; transition: 0.6s;
+        }
+        .update-modal.active { opacity: 1; }
+        .update-card {
+            background: rgba(10, 10, 10, 0.95); border: 2px solid var(--green); border-radius: 40px;
+            padding: 40px 30px; width: 85%; max-width: 400px; text-align: center;
+            box-shadow: 0 0 50px var(--glow); transform: scale(0.8); transition: 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .update-modal.active .update-card { transform: scale(1); }
+        .accept-btn {
+            margin-top: 25px; width: 100%; padding: 20px; border-radius: 22px;
+            background: var(--green); color: #000; border: none; font-weight: 900; font-size: 16px;
+            cursor: pointer; box-shadow: 0 10px 20px var(--glow); transition: 0.3s;
+        }
+        .exit-anim { transform: scale(1.5) !important; opacity: 0 !important; filter: blur(20px); }
+
+        .timer-display { font-size: 48px; font-weight: 900; margin: 20px 0; color: var(--green); text-shadow: 0 0 20px var(--glow); }
+        .claim-btn { width: 100%; padding: 20px; border-radius: 20px; background: var(--green); border: none; font-weight: 900; color:#000; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px var(--glow); }
+        .claim-btn.locked { background: #222; color: #555; cursor: not-allowed; box-shadow: none; }
+        .schedule-day { margin-bottom: 15px; text-align: left; opacity: 0; }
     </style>
 </head>
 <body>
 
-    <div id="updateModal">
-        <div class="matrix-bg"></div>
-        <div class="cyber-card">
-            <div style="color: var(--green); font-weight: 900; font-size: 11px; letter-spacing: 5px; margin-bottom: 10px;">SYSTEM UPGRADE</div>
-            <div class="glitch-text">v4.1</div>
-            <div style="text-align: left; margin: 35px 0;">
-                <div class="update-item">
-                    <div style="font-size: 24px;">👑</div>
-                    <div>
-                        <div style="color: #fff; font-weight: 800;">РАНГ КОРИСТУВАЧІВ</div>
-                        <div style="color: var(--green); font-size: 10px; font-weight: 900;">STATUS: ACTIVE</div>
-                    </div>
-                </div>
-                <div class="update-item">
-                    <div style="font-size: 24px;">🧠</div>
-                    <div>
-                        <div style="color: #fff; font-weight: 800;">ІНТЕЛЕКТ МОДУЛЬ</div>
-                        <div style="color: #888; font-size: 10px;">Унікальні факти про світ</div>
-                    </div>
-                </div>
-                <div class="update-item">
-                    <div style="font-size: 24px;">🦾</div>
-                    <div>
-                        <div style="color: #fff; font-weight: 800;">КІБЕР ПРОФІЛЬ</div>
-                        <div style="color: #888; font-size: 10px;">Просунута статистика XP</div>
-                    </div>
-                </div>
-            </div>
-            <button class="accept-btn" onclick="acceptUpdate()">
-                <div class="btn-shine"></div>
-                ПРИЙНЯТИ ЗМІНИ
-            </button>
-            <div style="margin-top: 35px; font-size: 10px; color: rgba(255,255,255,0.2); letter-spacing: 4px; font-weight: 900;">BY: TARASI4IK</div>
-        </div>
-    </div>
+    <canvas id="bg-canvas"></canvas>
 
-    <div id="app-root">
-        <div class="header staggered">
+    <!-- Основний контент -->
+    <div id="app-root" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+        <div class="header reveal">
             <h1>6-А ПОРТАЛ</h1>
-            <div class="ver">v4.1 CINEMATIC | By: TARASI4IK</div>
+            <div style="font-size:10px; color:var(--green); text-align:center; letter-spacing:3px; font-weight:900;">V4.2 | By Tarasi4ik</div>
         </div>
 
-        <div class="rank-bar staggered delay-1" onclick="openProfile()">
+        <div class="rank-bar reveal" onclick="openProfile()">
             <div>
-                <div style="font-size:10px; opacity:0.5; font-weight:900;">RANK STATUS</div>
-                <div id="topRankDisplay" style="font-weight:900; color:var(--blue); font-size:17px;">ГІСТЬ</div>
+                <div style="font-size:9px; opacity:0.6; font-weight:900;">RANK_SYSTEM</div>
+                <div id="topRankDisplay" style="font-weight:900; font-size:18px; color: var(--green);">LOADING...</div>
             </div>
             <div style="text-align:right;">
                 <div id="topExpText" style="font-size:12px; font-weight:900;">0 XP</div>
-                <div class="exp-bar-bg" style="width:100px; height:6px; background:rgba(255,255,255,0.05); border-radius:10px; margin-top:5px; overflow:hidden;">
-                    <div id="topExpFill" class="exp-bar-fill"></div>
+                <div style="width:80px; height:4px; background:rgba(255,255,255,0.1); border-radius:10px; margin-top:5px; overflow:hidden;">
+                    <div id="topExpFill" style="height:100%; background:var(--green); width:0%; transition:1.5s;"></div>
                 </div>
             </div>
         </div>
 
-        <div class="card staggered delay-2" id="mainCard">
-            <div style="font-size: 10px; font-weight: 950; color: var(--green); letter-spacing: 3px;">LIVE MONITORING</div>
-            <div id="lessonName" style="font-size: 32px; font-weight: 900; margin: 15px 0;">АНАЛІЗУЮ...</div>
-            <div id="nextLessonHint" style="font-size: 13px; opacity: 0.5;">синхронізація...</div>
-            <div class="progress-container" id="progCont"><div class="progress-bar" id="progBar"></div></div>
+        <div class="card reveal">
+            <div style="font-size: 10px; font-weight: 900; color: var(--green); letter-spacing: 2px;">LIVE_STATUS</div>
+            <div id="lessonName" style="font-size: 24px; font-weight: 900; margin: 10px 0;">ОНОВЛЕННЯ...</div>
+            <div id="nextLessonHint" style="font-size: 12px; opacity: 0.6; min-height: 15px;">...</div>
+            <div style="width:100%; height:6px; background:rgba(255,255,255,0.05); border-radius:10px; margin-top:15px; overflow:hidden;">
+                <div id="progBar" style="height:100%; background:var(--green); width:0%; transition:0.8s;"></div>
+            </div>
         </div>
 
-        <div class="btn-list staggered delay-3">
-            <button class="main-btn profile-btn" onclick="openProfile()">МІЙ КІБЕР-ПРОФІЛЬ 👤</button>
-            <button class="main-btn glow-btn" style="background: linear-gradient(90deg, #ff9a9e, #fad0c4); color: #000;" onclick="openTipGenerator()">ПОРАДА ДНЯ 💡</button>
-            <button class="main-btn glow-btn" onclick="openFactGenerator()">ІНТЕЛЕКТ-МОДУЛЬ ✨</button>
-            <button class="main-btn glow-btn" onclick="openExcuseGenerator()">ГЕНЕРАТОР ВІДМАЗОК ✨</button>
-            
+        <div class="btn-list reveal">
+            <button class="main-btn" onclick="openModal('timerModal')">ТОЧНИЙ ТАЙМЕР ⏱️</button>
             <button class="main-btn" onclick="openModal('notesModal')">МОЇ НОТАТКИ 📝</button>
-            <button class="main-btn" onclick="openModal('timerModal')">ЧАС ДО КІНЦЯ <span id="miniTimer" style="color:var(--green)">00:00</span></button>
-            <button class="main-btn" onclick="toggleSchedule()">РОЗКЛАД ДЗВІНКІВ 📅</button>
-            <div id="fullSchedule" style="display:none; flex-direction: column; gap: 8px; margin-top: 5px;"></div>
-        </div>
-
-        <div style="margin-top:auto; padding:20px; opacity:0.3; display:flex; gap:10px; justify-content:center;">
-            <input type="password" id="adminPass" style="width:60px; background:#111; border:1px solid #333; color:#444; border-radius:8px; padding:5px; font-size:10px;" placeholder="CODE">
-            <button onclick="checkAdminPass()" style="background:#111; border:none; color:#333; font-size:9px; font-weight:900;">LOGIN</button>
+            <button class="main-btn" onclick="openFact()">ІНТЕЛЕКТ-МОДУЛЬ ⚡️</button>
+            <button class="main-btn" onclick="openAdvice()">ПОРАДА ДНЯ 💡</button>
+            <button class="main-btn" onclick="toggleSchedule()">РОЗКЛАД ЗАНЯТЬ 📅</button>
+            <div id="fullSchedule" style="display:none; flex-direction: column; gap: 8px; padding: 20px; background: rgba(0,0,0,0.7); border-radius: 20px; border: 1px solid var(--border); font-size: 13px;"></div>
         </div>
     </div>
 
-    <!-- MODALS -->
-    <div id="notesModal" class="modal" onclick="closeAllModals()">
-        <div class="modal-box" onclick="event.stopPropagation()">
-            <h2 style="text-align:center; color:var(--blue); font-weight:900; margin-top:0;">ШВИДКІ НОТАТКИ</h2>
-            <div class="notes-area">
-                <textarea id="userNotes" placeholder="Введіть ваш текст тут..." oninput="saveNotes()"></textarea>
+    <!-- ВІКНО ОНОВЛЕНЬ -->
+    <div id="updateNotice" class="update-modal">
+        <div class="update-card" id="updateCard">
+            <div style="font-size: 50px;">🚀</div>
+            <h2 style="color:var(--green); margin:10px 0;">V4.2 ОНОВЛЕНО</h2>
+            <p style="font-size:13px; opacity:0.7;">Ми додали систему рангів, магазин тем та покращили стабільність.</p>
+            <div style="text-align:left; background:rgba(255,255,255,0.05); padding:15px; border-radius:20px; font-size:12px;">
+                • Новий дизайн карток<br>• Анімація при в ході<br>• Фікс таймера уроків
             </div>
-            <button class="main-btn glow-btn" onclick="closeAllModals()" style="justify-content:center; margin-top:20px; width:100%; color:#000;">ЗБЕРЕГТИ ТА ВИЙТИ</button>
+            <button class="accept-btn" onclick="acceptUpdate()">ПРИЙНЯТИ ЗМІНИ</button>
         </div>
     </div>
 
-    <div id="profileModal" class="modal" onclick="closeAllModals()">
-        <div class="modal-box" onclick="event.stopPropagation()">
-            <h2 style="text-align:center; color:var(--blue); font-weight:900;">DATA CENTER</h2>
-            <div id="rankList" style="margin-bottom:20px; font-size:13px; opacity:0.6;">
-                <div id="r0">Гість (0 XP)</div><div id="r1">Поважна особа (500 XP)</div>
-                <div id="r2">VIP (1200 XP)</div><div id="r3">Ліга майстрів (1900 XP)</div>
-                <div id="r4">Owner 👑 (1 000 000 XP)</div>
-            </div>
-            <div style="text-align:center;">
-                <div id="currentRankTitle" style="font-size:24px; font-weight:900; color:var(--purple);">ГІСТЬ</div>
-                <div style="width:100%; height:8px; background:rgba(255,255,255,0.05); border-radius:10px; margin:15px 0; overflow:hidden;">
-                    <div id="modalExpFill" class="exp-bar-fill"></div>
-                </div>
-                <div style="display:flex; justify-content:space-around; font-size:12px; opacity:0.6;">
-                    <span>Відмазки: <b id="stEx">0</b></span>
-                    <span>Факти: <b id="stFa">0</b></span>
-                    <span>XP: <b id="stTi">0</b></span>
-                </div>
-            </div>
-            <button class="main-btn glow-btn" onclick="closeAllModals()" style="justify-content:center; margin-top:25px; width:100%; color:#000;">ЗАКРИТИ</button>
-        </div>
-    </div>
+    <!-- Модалки -->
+    <div id="timerModal" class="modal" onclick="closeAllModals()"><div class="modal-box" onclick="event.stopPropagation()" style="text-align:center;"><div id="modalTimerClock" class="timer-display">00:00</div><div id="modalTimerSubject" style="font-weight:900;">...</div></div></div>
+    <div id="rewardsModal" class="modal" onclick="closeAllModals()"><div class="modal-box" onclick="event.stopPropagation()" style="text-align:center;"><div style="font-size:50px;">💎</div><button id="claimBtn" onclick="claimReward()" class="claim-btn">ЗАБРАТИ XP</button></div></div>
+    <div id="notesModal" class="modal" onclick="closeAllModals()"><div class="modal-box" onclick="event.stopPropagation()"><h2 style="color:var(--green);text-align:center;">НОТАТКИ</h2><textarea id="userNotes" oninput="saveNotes()" style="width:100%;height:200px;background:rgba(0,0,0,0.5);border:1px solid var(--border);color:#fff;border-radius:20px;padding:15px;outline:none;box-sizing:border-box;"></textarea></div></div>
 
-    <div id="factModal" class="modal" onclick="closeAllModals()">
-        <div class="modal-box" onclick="event.stopPropagation()">
-            <div style="color:var(--blue); font-weight:900; font-size:10px; letter-spacing:3px; text-align:center; margin-bottom:15px;">ІНТЕЛЕКТУАЛЬНИЙ ФАКТ</div>
-            <div id="factText" style="font-size:18px; text-align:center; padding:10px; font-weight:600; line-height:1.5; min-height:100px;">...</div>
-            <button class="main-btn glow-btn" onclick="syncAndGenerateFact()" style="justify-content:center; width:100%; color:#000; margin-top:20px;">ІНШИЙ ФАКТ</button>
-        </div>
-    </div>
-
-    <!-- MODAL TIPS -->
-    <div id="tipModal" class="modal" onclick="closeAllModals()">
-        <div class="modal-box" onclick="event.stopPropagation()">
-            <div style="color:#ff9a9e; font-weight:900; font-size:10px; letter-spacing:3px; text-align:center; margin-bottom:15px;">ПОРАДА ДЛЯ НАВЧАННЯ</div>
-            <div id="tipText" style="font-size:18px; text-align:center; padding:10px; font-weight:600; line-height:1.5; min-height:100px;">...</div>
-            <button class="main-btn glow-btn" onclick="generateTip()" style="justify-content:center; width:100%; color:#000; margin-top:20px;">ІНША ПОРАДА</button>
-        </div>
-    </div>
-
-    <div id="timerModal" class="modal" onclick="closeAllModals()">
-        <div class="modal-box" onclick="event.stopPropagation()">
-            <div id="countdownTimer" style="font-size:80px; text-align:center; color:var(--green); font-family:monospace; font-weight:900;">00:00</div>
-        </div>
-    </div>
-
-    <div id="excuseModal" class="modal" onclick="closeAllModals()">
-        <div class="modal-box" onclick="event.stopPropagation()">
-            <div style="font-size:19px; text-align:center; padding:30px; color:var(--gold); font-weight:800;">ГЕНЕРАТОР В СТАДІЇ ОНОВЛЕННЯ 🛠️</div>
-            <button class="main-btn glow-btn" onclick="closeAllModals()" style="justify-content:center; width:100%; color:#000;">ОК</button>
-        </div>
-    </div>
+    <!-- Навігація -->
+    <nav class="samsung-nav reveal">
+        <div class="nav-item active" id="nav-home" onclick="navTo('home')">🏠<span>Дім</span></div>
+        <div class="nav-item" id="nav-rewards" onclick="openRewards()">🎁<span>Бонус</span></div>
+        <div class="nav-item" id="nav-profile" onclick="openProfile()">👤<span>Профіль</span></div>
+    </nav>
 
     <script>
         const tg = window.Telegram.WebApp;
-        let stats = JSON.parse(localStorage.getItem('p_stats_v41_final')) || { ex: 0, fa: 0, mi: 0, tips: 0, lv: Date.now(), isOwner: false };
-        
-        const ranks = [
-            {n:"Гість",r:0},
-            {n:"Поважна особа",r:500},
-            {n:"VIP",r:1200},
-            {n:"Ліга майстрів",r:1900},
-            {n:"Owner 👑",r:1000000}
+        let stats = JSON.parse(localStorage.getItem('portal_v49_stats')) || { xp: 0, lastClaim: 0 };
+        let currentThemeColor = '#3EE35C';
+
+        const timeGrid = [
+            { start: "08:15", end: "08:55" }, { start: "09:00", end: "09:40" },
+            { start: "09:50", end: "10:30" }, { start: "10:40", end: "11:20" },
+            { start: "11:40", end: "12:20" }, { start: "12:30", end: "13:10" },
+            { start: "13:20", end: "14:00" }, { start: "14:10", end: "14:50" }
         ];
-        
-        const slots = [{s:"08:15",e:"08:55"},{s:"09:00",e:"09:40"},{s:"09:50",e:"10:30"},{s:"10:40",e:"11:20"},{s:"11:40",e:"12:20"},{s:"12:30",e:"13:10"},{s:"13:20",e:"14:00"},{s:"14:10",e:"14:50"}];
+
         const schedule = {
-            1: ["математика","історія","укр.мова","укр.мова","заруб. літ-ра","музика","математика","природа"],
-            2: ["математика","укр. літ-ра","громад. освіта","англ. мова","англ. мова","заруб. літ-ра","інформатика"],
-            3: ["математика","інформатика","географія","укр.мова","укр.мова","історія","хореограф"],
-            4: ["математика","укр. літ-ра","здоров'я, доброб","англ. мова","англ. мова","фізкультура"],
-            5: ["здоров'я, добробут","географія","фізкультура","природа","технології","англ. мова"]
+            1: ["Математика", "Історія", "Укр. мова", "Укр. мова", "Заруб. літ-ра", "Музика", "Математика", "Природа"],
+            2: ["Математика", "Укр. літ-ра", "Громад. освіта", "Англ. мова", "Англ. мова", "Заруб. літ-ра", "Інформатика"],
+            3: ["Математика", "Інформатика", "Географія", "Укр. мова", "Укр. мова", "Історія", "Хореографія"],
+            4: ["Математика", "Укр. літ-ра", "Здоров'я, добробут", "Англ. мова", "Англ. мова", "Хореографія"],
+            5: ["-", "Здоров'я, добробут", "Географія", "Фізкультура", "Природа", "Технології", "Англ. мова"]
         };
 
-        const factsArr = [
-            "Блискавка в 5 разів гарячіша за поверхню Сонця. ⚡",
-            "Око страуса більше за його мозок. 🦒",
-            "Мед ніколи не псується. 🍯",
-            "Восьминоги мають три серця і дев’ять мізків. 🐙",
-            "Венера обертається за годинниковою стрілкою. 🌌",
-            "Щосекунди Сонце спалює 600 млн тонн водню. ☀️",
-            "Хмари можуть важити сотні тонн. ☁️",
-            "Мозок генерує більше імпульсів, ніж усі телефони світу. 🧠",
-            "Швидкість вітру на Нептуні — 2100 км/год. 🌪️",
-            "Кит може не дихати 2 години. 🐳",
-            "На Сатурні йдуть дощі з алмазів. 💎",
-            "Коти мають 32 м'язи в кожному вусі. 🐱"
-        ];
+        function updateLiveStatus() {
+            const now = new Date();
+            const day = now.getDay();
+            const currentTime = now.getHours() * 60 + now.getMinutes();
+            const sec = now.getSeconds();
 
-        const tipsArr = [
-            "Пий воду під час навчання — мозок працює швидше. 💧",
-            "Метод Помодоро: 25 хв вчися, 5 хв відпочивай. ⏱️",
-            "Поясни тему другу — так ти запам'ятаєш її на 90%. 🗣️",
-            "Роби нотатки від руки, а не в телефоні. ✍️",
-            "Слухай фонову музику без слів (Lo-Fi або класика). 🎧",
-            "Найскладніше завдання роби першим. 🐸",
-            "Провітрюй кімнату перед уроками. 🌬️",
-            "Спи не менше 8 годин, щоб пам'ять працювала добре. 😴",
-            "Використовуй яскраві маркери для головних думок. 🖍️"
-        ];
-        
-        let usedFacts = JSON.parse(localStorage.getItem('used_facts')) || [];
-        let usedTips = JSON.parse(localStorage.getItem('used_tips')) || [];
+            const lessonLabel = document.getElementById('lessonName');
+            const hintLabel = document.getElementById('nextLessonHint');
+            const progBar = document.getElementById('progBar');
 
-        function save() { localStorage.setItem('p_stats_v41_final', JSON.stringify(stats)); updateRank(); }
-        function saveNotes() { localStorage.setItem('p_notes_v41', document.getElementById('userNotes').value); }
-        function loadNotes() { document.getElementById('userNotes').value = localStorage.getItem('p_notes_v41') || ""; }
-        
-        function getXP() { return stats.isOwner ? 1000000 : (stats.fa * 15 + stats.mi * 2 + (stats.tips || 0) * 10); }
-
-        function updateRank() {
-            const xp = getXP(); let cur = ranks[0], nxt = ranks[1];
-            ranks.forEach((r, i) => { if(xp >= r.r) { cur = r; nxt = ranks[i+1] || r; } });
-            document.getElementById('topRankDisplay').innerText = cur.n.toUpperCase();
-            let prog = nxt===cur ? 100 : ((xp-cur.r)/(nxt.r-cur.r))*100;
-            document.getElementById('topExpFill').style.width = prog + "%";
-            document.getElementById('topExpText').innerText = xp + " XP";
-            document.getElementById('stEx').innerText = stats.ex;
-            document.getElementById('stFa').innerText = stats.fa;
-            document.getElementById('stTi').innerText = stats.mi + "хв";
-            document.getElementById('currentRankTitle').innerText = cur.n;
-            document.getElementById('modalExpFill').style.width = prog + "%";
-        }
-
-        let isLoading = false;
-        function update() {
-            if (isLoading) return;
-            const now = new Date(); const day = now.getDay(); const cur = now.getHours()*3600 + now.getMinutes()*60 + now.getSeconds();
-            if (Math.floor(Date.now()/60000) > Math.floor(stats.lv/60000)) { stats.mi++; stats.lv=Date.now(); save(); }
-            
-            let act=null, nxt=null, p=0;
-            if(schedule[day]) {
-                slots.forEach((s, i) => {
-                    const st = s.s.split(':').reduce((h,m)=>h*3600+m*60), en = s.e.split(':').reduce((h,m)=>h*3600+m*60);
-                    if(cur>=st && cur<en && schedule[day][i]) { act=schedule[day][i]; p=((cur-st)/(en-st))*100; let r=en-cur; const tS = Math.floor(r/60)+":"+(r%60).toString().padStart(2,'0'); document.getElementById('miniTimer').innerText = tS; document.getElementById('countdownTimer').innerText = tS; }
-                    if(cur<st && !nxt && schedule[day][i]) nxt=schedule[day][i];
-                });
+            if (day === 0 || day === 6 || !schedule[day]) {
+                lessonLabel.innerText = "ВИХІДНИЙ 🎉"; return;
             }
-            document.getElementById('lessonName').innerText = act ? act.toUpperCase() : (nxt ? "ПЕРЕРВА ☕" : "ВІЛЬНО");
-            document.getElementById('nextLessonHint').innerText = nxt ? "НАСТУПНИЙ: " + nxt.toUpperCase() : "ВІДПОЧИНОК";
-            document.getElementById('progCont').style.display = act ? 'block' : 'none';
-            document.getElementById('progBar').style.width = p + "%";
+
+            const today = schedule[day];
+            let active = null;
+            for (let i = 0; i < today.length; i++) {
+                const [sH, sM] = timeGrid[i].start.split(':').map(Number);
+                const [eH, eM] = timeGrid[i].end.split(':').map(Number);
+                const start = sH * 60 + sM;
+                const end = eH * 60 + eM;
+
+                if (currentTime >= start && currentTime < end) {
+                    active = { name: today[i], start, end }; break;
+                }
+            }
+
+            if (active) {
+                lessonLabel.innerText = active.name;
+                const p = (((currentTime - active.start) * 60 + sec) / ((active.end - active.start) * 60)) * 100;
+                progBar.style.width = p + "%";
+                hintLabel.innerText = "До кінця: " + (active.end - currentTime) + " хв";
+            } else {
+                lessonLabel.innerText = "ПЕРЕРВА ☕️";
+                progBar.style.width = "0%";
+            }
         }
 
-        function openTipGenerator() {
-            generateTip();
-            openModal('tipModal');
-        }
-
-        function generateTip() {
-            if (usedTips.length >= tipsArr.length) usedTips = [];
-            let available = tipsArr.filter(t => !usedTips.includes(t));
-            let randomTip = available[Math.floor(Math.random() * available.length)];
-            usedTips.push(randomTip);
-            localStorage.setItem('used_tips', JSON.stringify(usedTips));
-            document.getElementById('tipText').innerText = randomTip;
-            if(!stats.tips) stats.tips = 0;
-            stats.tips++;
-            save();
-            tg.HapticFeedback.impactOccurred('light');
+        function checkUpdateNotice() {
+            let visits = parseInt(localStorage.getItem('portal_visit_count')) || 0;
+            if (visits < 2) {
+                const modal = document.getElementById('updateNotice');
+                modal.style.display = 'flex';
+                setTimeout(() => modal.classList.add('active'), 100);
+                localStorage.setItem('portal_visit_count', visits + 1);
+            }
         }
 
         function acceptUpdate() {
-            const modal = document.getElementById('updateModal');
-            const card = document.querySelector('.cyber-card');
-            card.style.transform = 'scale(0.5) translateY(-100px)';
+            const modal = document.getElementById('updateNotice');
+            const card = document.getElementById('updateCard');
+            card.classList.add('exit-anim');
             modal.style.opacity = '0';
-            tg.HapticFeedback.notificationOccurred('success');
-            setTimeout(() => { modal.style.display = 'none'; }, 700);
+            setTimeout(() => { modal.style.display = 'none'; showToast("СИСТЕМУ ГОТОВО ⚡"); }, 600);
         }
 
-        function openFactGenerator() {
-            isLoading = true;
-            document.getElementById('lessonName').innerText = "СИНХРОНІЗАЦІЯ...";
-            document.getElementById('progCont').style.display = 'block';
-            let bar = document.getElementById('progBar'); bar.style.width = "0%";
-            setTimeout(() => { 
-                isLoading = false; 
-                syncAndGenerateFact();
-                openModal('factModal'); update();
-            }, 1200);
-        }
-
-        function syncAndGenerateFact() {
-            if (usedFacts.length >= factsArr.length) usedFacts = [];
-            let availableFacts = factsArr.filter(f => !usedFacts.includes(f));
-            let randomFact = availableFacts[Math.floor(Math.random() * availableFacts.length)];
-            usedFacts.push(randomFact);
-            localStorage.setItem('used_facts', JSON.stringify(usedFacts));
-            document.getElementById('factText').innerText = randomFact;
-            stats.fa++; 
-            save();
-            tg.HapticFeedback.impactOccurred('light');
-        }
+        function openModal(id) { document.getElementById(id).style.display='flex'; setTimeout(()=>document.getElementById(id).classList.add('active'),10); }
+        function closeAllModals() { document.querySelectorAll('.modal').forEach(m=>{m.classList.remove('active'); setTimeout(()=>m.style.display='none',400);}); }
+        function navTo(id) { document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); if(document.getElementById('nav-'+id)) document.getElementById('nav-'+id).classList.add('active'); if(id==='home') closeAllModals(); }
+        function openProfile() { openModal('notesModal'); navTo('profile'); }
+        function openRewards() { openModal('rewardsModal'); navTo('rewards'); }
+        function saveNotes() { localStorage.setItem('portal_notes', document.getElementById('userNotes').value); }
+        function showToast(t) { const el = document.createElement('div'); el.className='toast'; el.innerText = t; document.body.appendChild(el); setTimeout(()=>el.remove(), 2500); }
+        function updateUI() { document.getElementById('topRankDisplay').innerText = stats.xp > 1000 ? "МАЙСТЕР" : "НОВАЧОК"; document.getElementById('topExpText').innerText = stats.xp + " XP"; document.getElementById('topExpFill').style.width = Math.min((stats.xp/5000)*100, 100) + "%"; }
+        function openFact() { stats.xp += 10; localStorage.setItem('portal_v49_stats', JSON.stringify(stats)); updateUI(); showToast("+10 XP ЗА РОЗУМ 🧠"); }
+        function openAdvice() { showToast("Будь кращим сьогодні! ✨"); }
 
         function toggleSchedule() {
             const s = document.getElementById('fullSchedule');
             if(s.style.display === 'none') {
-                const d = new Date().getDay(); let html = "";
-                if(schedule[d]) { schedule[d].forEach((u, i) => { html += `<div style="background:rgba(255,255,255,0.03); padding:10px; border-radius:12px; display:flex; justify-content:space-between; border-left:3px solid var(--green);">${u.toUpperCase()} <span style="opacity:0.4">${slots[i].s}</span></div>`; }); }
-                s.innerHTML = html; s.style.display = 'flex';
-            } else { s.style.display = 'none'; }
+                s.innerHTML = "<b>РОЗКЛАД ЗАВАНТАЖЕНО</b>"; s.style.display = 'flex';
+            } else s.style.display = 'none';
         }
 
-        function checkAdminPass() { if(document.getElementById('adminPass').value === "1453") { stats.isOwner = true; save(); alert("OWNER ACTIVE 👑"); } }
-        function openExcuseGenerator() { stats.ex++; save(); openModal('excuseModal'); }
-        function openProfile() { updateRank(); openModal('profileModal'); }
-        function openModal(id) { const m=document.getElementById(id); m.style.display='flex'; setTimeout(()=>m.classList.add('active'),10); tg.HapticFeedback.impactOccurred('medium'); }
-        function closeAllModals() { document.querySelectorAll('.modal').forEach(m=>{ m.classList.remove('active'); setTimeout(()=>m.style.display='none',500); }); }
+        // Background
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let pts = [];
+        function res() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        class Pt {
+            constructor() { this.x = Math.random()*window.innerWidth; this.y = Math.random()*window.innerHeight; this.s = Math.random()*2; this.sp = Math.random()*0.5; }
+            dr() { this.y += this.sp; if(this.y > canvas.height) this.y = -5; ctx.fillStyle = "#3EE35C"; ctx.globalAlpha = 0.3; ctx.beginPath(); ctx.arc(this.x, this.y, this.s, 0, 7); ctx.fill(); }
+        }
+        function anim() { ctx.clearRect(0,0,canvas.width,canvas.height); pts.forEach(p=>p.dr()); requestAnimationFrame(anim); }
+        window.onresize = res; res(); for(let i=0;i<40;i++) pts.push(new Pt()); anim();
 
-        window.addEventListener('load', () => {
-            let views = parseInt(localStorage.getItem('v41_views') || "0");
-            if(views < 2) {
-                document.getElementById('updateModal').style.display = 'flex';
-                localStorage.setItem('v41_views', (views + 1).toString());
-            }
-            loadNotes(); updateRank(); update(); setInterval(update, 1000); tg.expand();
-        });
+        window.onload = () => {
+            document.getElementById('userNotes').value = localStorage.getItem('portal_notes') || "";
+            updateUI(); setInterval(updateLiveStatus, 1000); tg.expand();
+            checkUpdateNotice();
+            setTimeout(() => document.querySelectorAll('.reveal').forEach(el => el.classList.add('active')), 100);
+        };
     </script>
 </body>
 </html>
