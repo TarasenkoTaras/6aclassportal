@@ -25,7 +25,6 @@
 
         #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
 
-        /* Вхідні анімації */
         .reveal { opacity: 0; transform: translateY(30px); transition: var(--transition); }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
@@ -37,7 +36,6 @@
         }
         @keyframes titleFlow { 0% { background-position: 0% 50%; } 100% { background-position: 300% 50%; } }
 
-        /* Плаваюча анімація для карток */
         @keyframes float {
             0%, 100% { transform: translateY(0) rotate(0deg); }
             50% { transform: translateY(-10px) rotate(1deg); }
@@ -49,6 +47,7 @@
             justify-content: space-between; backdrop-filter: blur(15px);
             box-shadow: 0 0 20px var(--glow); transition: var(--transition); width: 85%;
             animation: float 6s ease-in-out infinite;
+            cursor: default;
         }
 
         .card { 
@@ -69,7 +68,6 @@
             position: relative; overflow: hidden;
         }
         
-        /* Ефект при дотику */
         .main-btn:active { transform: scale(0.92) rotate(-1deg); filter: brightness(1.2); }
         
         .main-btn::after {
@@ -124,6 +122,12 @@
         .schedule-day { margin-bottom: 15px; text-align: left; animation: slideIn 0.4s ease-out forwards; opacity: 0; }
         @keyframes slideIn { from { transform: translateX(-20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         .schedule-day b { color: var(--green); display: block; margin-bottom: 5px; border-bottom: 1px solid var(--border); }
+        
+        /* Стилі для профілю */
+        .profile-status { font-size: 50px; color: var(--green); margin-bottom: 10px; }
+        .profile-username { color: rgba(255,255,255,0.5); font-size: 1.1em; margin-top: 5px; font-weight: 700; }
+        .secrets-label { display: block; margin: 25px 0 8px; font-size: 13px; color: rgba(255,255,255,0.4); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .secrets-area { width: 100%; height: 100px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; border-radius: 20px; padding: 15px; outline: none; box-sizing: border-box; resize: none; font-family: 'Inter', sans-serif; }
     </style>
 </head>
 <body>
@@ -136,9 +140,9 @@
             <div style="font-size:10px; color:var(--green); text-align:center; letter-spacing:3px; font-weight:900;">V4.9.1 | FINAL</div>
         </div>
 
-        <div class="rank-bar reveal" onclick="openProfile()">
+        <div class="rank-bar reveal">
             <div>
-                <div style="font-size:9px; opacity:0.6; font-weight:900;">RANK_SYSTEM</div>
+                <div style="font-size:9px; opacity:0.6; font-weight:900;">RANK SYSTEM</div>
                 <div id="topRankDisplay" style="font-weight:900; font-size:18px; color: var(--green);">LOADING...</div>
             </div>
             <div style="text-align:right;">
@@ -150,7 +154,7 @@
         </div>
 
         <div class="card reveal">
-            <div id="liveLabel" style="font-size: 10px; font-weight: 900; color: var(--green); letter-spacing: 2px;">LIVE_STATUS</div>
+            <div id="liveLabel" style="font-size: 10px; font-weight: 900; color: var(--green); letter-spacing: 2px;">LIVE STATUS</div>
             <div id="lessonName" style="font-size: 24px; font-weight: 900; margin: 10px 0;">ОНОВЛЕННЯ...</div>
             <div id="nextLessonHint" style="font-size: 12px; opacity: 0.6; min-height: 15px;">...</div>
             <div style="width:100%; height:6px; background:rgba(255,255,255,0.05); border-radius:10px; margin-top:15px; overflow:hidden;">
@@ -160,7 +164,7 @@
 
         <div class="btn-list reveal">
             <button class="main-btn" onclick="openModal('timerModal')">ТОЧНИЙ ТАЙМЕР ⏱️</button>
-            <button class="main-btn" onclick="openModal('notesModal')">МОЇ НОТАТКИ 📝</button>
+            <button class="main-btn" onclick="openProfile()">МІЙ ПРОФІЛЬ 👤</button>
             <button class="main-btn" onclick="openFact()">ІНТЕЛЕКТ-МОДУЛЬ ⚡️</button>
             <button class="main-btn" onclick="openAdvice()">ПОРАДА ДНЯ 💡</button>
             <button class="main-btn" onclick="toggleSchedule()">РОЗКЛАД ЗАНЯТЬ 📅</button>
@@ -169,10 +173,9 @@
         </div>
     </div>
 
-    <!-- Модалки -->
     <div id="timerModal" class="modal" onclick="closeAllModals()">
         <div class="modal-box" onclick="event.stopPropagation()" style="text-align: center;">
-            <div style="font-size: 12px; font-weight: 900; letter-spacing: 2px; opacity: 0.5;">TIME_REMAINING</div>
+            <div style="font-size: 12px; font-weight: 900; letter-spacing: 2px; opacity: 0.5;">TIME REMAINING</div>
             <div id="modalTimerClock" class="timer-display">00:00</div>
             <div id="modalTimerSubject" style="font-weight: 900; margin-bottom: 20px;">УРОК НЕ ВИЗНАЧЕНО</div>
             <div style="width:100%; height:12px; background:rgba(255,255,255,0.05); border-radius:20px; overflow:hidden; border: 1px solid var(--border);">
@@ -216,24 +219,33 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                 <div class="theme-card" onclick="buyTheme('green', 0)">
                     <div style="width:25px; height:25px; background:#3EE35C; border-radius:50%; margin:0 auto 10px;"></div>
-                    <b style="font-size:10px;">EMERALD</b>
+                    <b style="font-size:10px;">EMERALD (0 XP)</b>
                 </div>
                 <div class="theme-card" onclick="buyTheme('purple', 500)">
                     <div style="width:25px; height:25px; background:#bf00ff; border-radius:50%; margin:0 auto 10px;"></div>
-                    <b style="font-size:10px;">PURPLE</b>
+                    <b style="font-size:10px;">PURPLE (500 XP)</b>
                 </div>
                 <div class="theme-card" onclick="buyTheme('yellow', 1000)">
                     <div style="width:25px; height:25px; background:#ffff00; border-radius:50%; margin:0 auto 10px;"></div>
-                    <b style="font-size:10px;">ELECTRIC</b>
+                    <b style="font-size:10px;">ELECTRIC (1000 XP)</b>
+                </div>
+                <div class="theme-card" onclick="buyTheme('pink', 1500)">
+                    <div style="width:25px; height:25px; background:#ff69b4; border-radius:50%; margin:0 auto 10px;"></div>
+                    <b style="font-size:10px;">PINK (1500 XP)</b>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Оновлений модал профілю -->
     <div id="notesModal" class="modal" onclick="closeAllModals()">
-        <div class="modal-box" onclick="event.stopPropagation()">
-            <h2 style="color:var(--green); text-align:center;">НОТАТКИ</h2>
-            <textarea id="userNotes" oninput="saveNotes()" style="width:100%; height:200px; background:rgba(0,0,0,0.5); border:1px solid var(--border); color:#fff; border-radius:20px; padding:15px; outline:none; box-sizing:border-box;" placeholder="Тут твої секрети..."></textarea>
+        <div class="modal-box" onclick="event.stopPropagation()" style="text-align:center;">
+            <div class="profile-status">✅</div>
+            <h2 style="margin: 5px 0; color:#fff;">Ви Зареєстровані</h2>
+            <div class="profile-username">@6auser</div>
+            
+            <label class="secrets-label">Пишіть свої секрети тут</label>
+            <textarea id="userNotes" oninput="saveNotes()" class="secrets-area" placeholder="..."></textarea>
         </div>
     </div>
 
@@ -242,7 +254,6 @@
         let stats = JSON.parse(localStorage.getItem('portal_v49_stats')) || { xp: 0, lastClaim: 0 };
         let currentThemeColor = '#3EE35C';
 
-        // Intersection Observer для плавної появи при скролі
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) entry.target.classList.add('active');
@@ -252,21 +263,40 @@
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
         const timeGrid = [
-            { start: "08:15", end: "08:55" }, { start: "09:00", end: "09:40" },
-            { start: "09:50", end: "10:30" }, { start: "10:40", end: "11:20" },
-            { start: "11:40", end: "12:20" }, { start: "12:30", end: "13:10" },
-            { start: "13:20", end: "14:00" }, { start: "14:10", end: "14:50" }
+            { start: "08:15", end: "08:55" }, 
+            { start: "09:00", end: "09:40" }, 
+            { start: "09:50", end: "10:30" }, 
+            { start: "10:40", end: "11:20" }, 
+            { start: "11:40", end: "12:20" }, 
+            { start: "12:30", end: "13:10" }, 
+            { start: "13:20", end: "14:00" }, 
+            { start: "14:10", end: "14:50" }  
         ];
 
         const schedule = {
-            1: ["Математика", "Історія", "Укр. мова", "Укр. мова", "Заруб. літ-ра", "Музика", "Математика", "Природа"],
-            2: ["Математика", "Укр. літ-ра", "Громад. освіта", "Англ. мова", "Англ. мова", "Заруб. літ-ра", "Інформатика"],
-            3: ["Математика", "Інформатика", "Географія", "Укр. мова", "Укр. мова", "Історія", "Хореографія"],
-            4: ["Математика", "Укр. літ-ра", "Здоров'я, добробут", "Англ. мова", "Англ. мова", "Хореографія"],
-            5: ["-", "Здоров'я, добробут", "Географія", "Фізкультура", "Природа", "Технології", "Англ. мова"]
+            1: ["математика", "історія", "укр.мова", "укр.мова", "заруб. літ-ра", "музика", "математика", "природа"],
+            2: ["математика", "укр. літ-ра", "громад. освіта", "англ. мова", "англ. мова", "заруб. літ-ра", "інформатика"],
+            3: ["математика", "інформатика", "географія", "укр.мова", "укр.мова", "історія", "хореограф"],
+            4: ["математика", "укр. літ-ра", "здоров'я, доброб", "англ. мова", "англ. мова", "фізкультура"],
+            5: ["-", "здоров'я, добробут", "географія", "фізкультура", "природа", "технології", "англ. мова"]
         };
 
         const dayNames = ["НЕДІЛЯ", "ПОНЕДІЛОК", "ВІВТОРОК", "СЕРЕДА", "ЧЕТВЕР", "П'ЯТНИЦЯ", "СУБОТА"];
+
+        const scienceFacts = [
+            "Мед ніколи не псується. Його знаходили їстівним у гробницях фараонів 🍯",
+            "Восьминоги мають три серця та блакитну кров 🐙",
+            "День на Венері довший, ніж рік на Венері 🪐",
+            "Банани — це ягоди, а полуниця — ні 🍌",
+            "Ейфелева вежа стає вищою на 15 см влітку через тепло 🗼",
+            "Швидкість світла — 300 000 кілометрів на секунду ✨",
+            "Мозок генерує енергію, щоб запалити лампочку 💡",
+            "ДНК людини на 50% збігається з ДНК банана 🧬",
+            "У космосі панує повна тишина 🌌",
+            "Коти мають 32 м'язи у кожному вусі 🐈",
+            "Гора Олімп на Марсі втричі вища за Еверест 🌋",
+            "Гаряча вода може замерзнути швидше за холодну ❄️"
+        ];
 
         function updateLiveStatus() {
             const now = new Date();
@@ -285,67 +315,47 @@
             if (day === 0 || day === 6 || !schedule[day]) {
                 const txt = "ВИХІДНИЙ 🎉";
                 lessonLabel.innerText = txt; mSubject.innerText = txt;
-                mClock.innerText = "--:--";
-                return;
+                mClock.innerText = "--:--"; return;
             }
 
             const today = schedule[day];
             let lastIdx = -1;
             for(let i=today.length-1; i>=0; i--) { if(today[i] && today[i] !== "-") { lastIdx = i; break; } }
-            
             const [lastH, lastM] = timeGrid[lastIdx].end.split(':').map(Number);
-            const dayEnd = lastH * 60 + lastM;
-
-            if (currentTime >= dayEnd) {
+            if (currentTime >= lastH * 60 + lastM) {
                 lessonLabel.innerText = "УРОКИ СКІНЧИЛИСЬ ✨";
-                mSubject.innerText = "ВІЛЬНИЙ ЧАС";
-                mClock.innerText = "FREE";
-                progBar.style.width = "100%";
-                return;
+                mSubject.innerText = "ВІЛЬНИЙ ЧАС"; mClock.innerText = "FREE";
+                progBar.style.width = "100%"; mBar.style.width = "100%"; return;
             }
 
-            let active = null;
-            let next = null;
-
-            for (let i = 0; i <= lastIdx; i++) {
+            let active = null; let next = null;
+            for (let i = 0; i < timeGrid.length; i++) {
                 const [sH, sM] = timeGrid[i].start.split(':').map(Number);
                 const [eH, eM] = timeGrid[i].end.split(':').map(Number);
-                const start = sH * 60 + sM;
-                const end = eH * 60 + eM;
-
-                if (currentTime >= start && currentTime < end) {
-                    active = { name: today[i], start, end }; break;
-                }
-                if (currentTime < start) {
-                    next = { name: today[i], start }; break;
-                }
+                const start = sH * 60 + sM; const end = eH * 60 + eM;
+                if (currentTime >= start && currentTime < end) { active = { name: today[i] || "Урок", start, end }; break; }
+                if (currentTime < start) { next = { name: today[i] || "Наступний", start }; break; }
             }
 
             if (active) {
                 const totalSec = (active.end - active.start) * 60;
                 const elapsedSec = (currentTime - active.start) * 60 + sec;
                 const remainSec = totalSec - elapsedSec;
-                
-                const min = Math.floor(remainSec / 60);
-                const s = remainSec % 60;
-                
-                lessonLabel.innerText = active.name === "-" ? "ВІЛЬНИЙ ЧАС" : active.name;
-                mSubject.innerText = lessonLabel.innerText;
+                const min = Math.floor(remainSec / 60); const s = remainSec % 60;
+                const displayTitle = (active.name === "-" || !active.name) ? "ВІЛЬНИЙ ЧАС" : active.name.toUpperCase();
+                lessonLabel.innerText = displayTitle; mSubject.innerText = displayTitle;
                 mClock.innerText = `${min}:${s < 10 ? '0' + s : s}`;
-                
                 const p = (elapsedSec / totalSec * 100);
-                progBar.style.width = p + "%";
-                mBar.style.width = p + "%";
-                hintLabel.innerText = `Залишилось: ${min} хв`;
+                progBar.style.width = p + "%"; mBar.style.width = p + "%";
+                hintLabel.innerText = `До кінця: ${min} хв`;
             } else if (next) {
                 lessonLabel.innerText = "ПЕРЕРВА ☕️";
-                mSubject.innerText = "ДО УРОКУ (" + next.name + ")";
-                const waitMin = next.start - currentTime - 1;
-                const waitSec = 60 - sec;
+                const nextTitle = (next.name === "-" || !next.name) ? "Наступного уроку" : next.name;
+                mSubject.innerText = "ДО УРОКУ: " + nextTitle.toUpperCase();
+                const waitMin = next.start - currentTime - 1; const waitSec = 60 - sec;
                 mClock.innerText = `${waitMin}:${waitSec < 10 ? '0' + waitSec : waitSec}`;
-                progBar.style.width = "0%";
-                mBar.style.width = "0%";
-                hintLabel.innerText = `Наступний: ${next.name}`;
+                progBar.style.width = "0%"; mBar.style.width = "0%";
+                hintLabel.innerText = `Наступний: ${nextTitle}`;
             }
         }
 
@@ -353,12 +363,10 @@
             const btn = document.getElementById('claimBtn');
             const isReady = Date.now() - stats.lastClaim > 86400000;
             if (isReady) {
-                btn.innerText = "ЗАБРАТИ +100 XP";
-                btn.classList.remove('locked');
+                btn.innerText = "ЗАБРАТИ +100 XP"; btn.classList.remove('locked');
                 document.getElementById('rewardBadge').style.display = 'block';
             } else {
-                btn.innerText = "ЩЕ НЕ ЧАС";
-                btn.classList.add('locked');
+                btn.innerText = "ЩЕ НЕ ЧАС"; btn.classList.add('locked');
                 document.getElementById('rewardBadge').style.display = 'none';
             }
         }
@@ -366,21 +374,21 @@
         function claimReward() {
             if (Date.now() - stats.lastClaim < 86400000) return;
             stats.xp += 100; stats.lastClaim = Date.now(); save();
-            showToast("💎 +100 XP ОТРИМАНО!");
-            updateRewardsBtn();
+            showToast("💎 +100 XP ОТРИМАНО!"); updateRewardsBtn();
         }
 
-        function openRewards() { openModal('rewardsModal'); navTo('rewards'); updateRewardsBtn(); }
+        function openRewards() { 
+            // Закриваємо магазин перед відкриттям бонусів, якщо він відкритий
+            document.querySelectorAll('.modal').forEach(m=>m.classList.remove('active'));
+            setTimeout(() => {
+                document.querySelectorAll('.modal').forEach(m=>m.style.display='none');
+                openModal('rewardsModal'); 
+                navTo('rewards'); 
+                updateRewardsBtn();
+            }, 300);
+        }
 
-        const allAdvices = [
-            "Пий воду 💧", "Роби розминку 👀", "Читай книги 📚", "Менше Тік-Току 📵", 
-            "Спи 8 годин 😴", "Усміхнись собі 😊", "Запиши плани на завтра 📝", 
-            "Провітри кімнату 🌬️", "Подякуй комусь сьогодні ❤️", "Слухай музику 🎧",
-            "Зроби перерву від екрана 📵", "З'їж фрукт 🍎", "Потягнися вгору 🙆‍♂️",
-            "Повтори розклад 📅", "Зроби добру справу ✨", "Мрій сміливо 🚀",
-            "Будь впевненим у собі 💪", "Навчайся новому 🎓", "Спробуй медитацію 🧘",
-            "Обійми близьких 🤗", "Знайди час для хобі 🎨", "Прибери на столі 🧹"
-        ];
+        const allAdvices = ["Пий воду 💧", "Роби розминку 👀", "Читай книги 📚", "Менше Тік-Току 📵", "Спи 8 годин 😴", "Усміхнись собі 😊"];
         let usedAdvices = JSON.parse(localStorage.getItem('portal_used_advices')) || [];
 
         function openAdvice() {
@@ -394,13 +402,15 @@
 
         function buyTheme(type, price) {
             if(stats.xp < price) { showToast("МАЛО XP!", "red"); return; }
+            if (price > 0) { stats.xp -= price; showToast(`ЗНЯТО ${price} XP 💸`); }
             if(type === 'purple') currentThemeColor = '#bf00ff';
             else if(type === 'yellow') currentThemeColor = '#ffff00';
+            else if(type === 'pink') currentThemeColor = '#ff69b4';
             else currentThemeColor = '#3EE35C';
             document.documentElement.style.setProperty('--green', currentThemeColor);
             document.documentElement.style.setProperty('--glow', currentThemeColor + '55');
             document.documentElement.style.setProperty('--border', currentThemeColor + '66');
-            showToast("ТЕМА ОНОВЛЕНА"); updateUI();
+            save(); showToast("ТЕМА ОНОВЛЕНА");
         }
 
         function updateUI() {
@@ -411,42 +421,50 @@
         }
 
         function save() { localStorage.setItem('portal_v49_stats', JSON.stringify(stats)); updateUI(); }
-        
+
         function openFact() { 
+            const randomFact = scienceFacts[Math.floor(Math.random() * scienceFacts.length)];
             stats.xp += 10; 
             save(); 
-            showToast("+10 XP ЗА РОЗУМ 🧠"); 
+            showToast(`🧠 ФАКТ: ${randomFact}`); 
         }
 
         function showToast(t, b) {
             const el = document.createElement('div'); el.className='toast';
             el.style.background = b || currentThemeColor; el.innerText = t;
             document.body.appendChild(el); setTimeout(()=> {
-                el.style.opacity = '0';
-                el.style.top = '-50px';
+                el.style.opacity = '0'; el.style.top = '-50px';
                 setTimeout(() => el.remove(), 500);
-            }, 2000);
+            }, 3000);
         }
 
         function navTo(id) {
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             const target = document.getElementById('nav-'+id);
             if(target) target.classList.add('active');
-            if(id === 'shop') openModal('shopModal');
+            
+            if(id === 'shop') {
+                // Закриваємо інші модалки перед відкриттям магазину
+                document.querySelectorAll('.modal').forEach(m => {
+                    if(m.id !== 'shopModal') m.classList.remove('active');
+                });
+                openModal('shopModal');
+            }
             if(id === 'profile') openProfile();
             if(id === 'home') closeAllModals();
         }
 
         function openModal(id) { 
-            const m=document.getElementById(id); 
-            m.style.display='flex'; 
+            const m=document.getElementById(id); m.style.display='flex'; 
             setTimeout(()=>m.classList.add('active'),10); 
         }
 
         function closeAllModals() { 
             document.querySelectorAll('.modal').forEach(m=>m.classList.remove('active')); 
             setTimeout(()=>document.querySelectorAll('.modal').forEach(m=>m.style.display='none'),400); 
-            navTo('home'); 
+            // Скидаємо навігацію на "Дім" тільки якщо ми дійсно закриваємо все
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById('nav-home').classList.add('active');
         }
 
         function openProfile() { openModal('notesModal'); navTo('profile'); }
@@ -458,14 +476,13 @@
                 let h = "";
                 for(let d=1; d<=5; d++){
                     h += `<div class="schedule-day" style="animation-delay: ${d*0.1}s"><b>${dayNames[d]}</b>`;
-                    schedule[d].forEach((l, i)=> h += `<div>${i}. ${l} <span style="opacity:0.3;font-size:9px;">(${timeGrid[i].start})</span></div>`);
+                    schedule[d].forEach((l, i)=> { if(l && l !== "-") h += `<div>${i}. ${l} <span style="opacity:0.3;font-size:9px;">(${timeGrid[i].start})</span></div>`; });
                     h += `</div>`;
                 }
                 s.innerHTML = h; s.style.display = 'flex';
             } else s.style.display = 'none';
         }
 
-        // Покращений фон
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let pts = [];
@@ -483,10 +500,7 @@
         window.onload = () => {
             document.getElementById('userNotes').value = localStorage.getItem('portal_notes') || "";
             updateUI(); setInterval(updateLiveStatus, 1000); tg.expand();
-            // Початковий вхід
-            setTimeout(() => {
-                document.querySelectorAll('.reveal').forEach(el => el.classList.add('active'));
-            }, 100);
+            setTimeout(() => { document.querySelectorAll('.reveal').forEach(el => el.classList.add('active')); }, 100);
         };
     </script>
 </body>
